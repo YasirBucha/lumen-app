@@ -1,14 +1,14 @@
 # Lumen — Agent Handoff
 
-**Updated:** 2026-06-30  
-**Branch:** `main` @ `fb24977`  
-**Phase:** 1 complete · Phase 2 in progress (functions scaffold; deploy blocked on Blaze)
+**Updated:** 2026-06-30 (harness audit pass)  
+**Branch:** `main`  
+**Phase:** 1 complete · Phase 2 partial (functions in repo; deploy blocked on Blaze)
 
 ---
 
 ## Autonomous mode
 
-Yasir prefers agents **commit, deploy, and implement without waiting** for approval (unless destructive). Cursor rule updated.
+Yasir prefers agents **commit, deploy, and implement without waiting** for approval — except destructive ops, secrets exposure, production config changes, deploy, push, or data reset.
 
 ---
 
@@ -16,46 +16,63 @@ Yasir prefers agents **commit, deploy, and implement without waiting** for appro
 
 ### Phase 1 — mobile shell ✅
 - AppShell + BottomTabBar (Today, Ledger, Verdicts, Shape, Office)
-- Screens: Scanning, Ledger, Verdicts, Patterns, Settings
-- Sign-in → scanning → dashboard flow
+- Screens: SignIn, Scanning, Dashboard, Ledger, Verdicts, Patterns, Settings
+- Primitives, dashboard widgets, seed/Firestore fallback
+- Sign-in → scanning → tab shell flow
 
 ### Phase 2 — partial 🟡
-- `functions/`: `gmailInitialSync`, parser layer (10 merchants), Gemini fallback
-- **ConnectGmailFlow** overlay wired (pick → consent → scan → done)
-- `gmailConnect.ts` client + Firestore `gmail_accounts` writes
+- `functions/`: `gmailInitialSync`, 10 merchant parsers, Gemini fallback, incremental stub
+- **ConnectGmailFlow** overlay (pick → consent → scan → done)
+- `gmailConnect.ts` + `useGmailAccounts` + Firestore `gmail_accounts`
 - Hosting deployed: https://lumen-20260630.web.app
 
-### Git
-- `ef293b4` Phase 1 base
-- `fb24977` Phase 1/2 tabs + functions + ConnectGmailFlow
-- Pushed to `genspark` remote
+### Harness (this pass) ✅
+- Refreshed `docs/agentic-harness.md`, `product-architecture-map.md`, `testing-plan.md`, `runtime-harness-opportunities.md`
+- Verified builds: `npm run build`, `functions npm run build`
 
 ---
 
 ## Blockers
 
-- **Functions deploy** — project on Spark; needs **Blaze upgrade** (billing quota on shared account blocked auto-link). Upgrade: [Firebase usage](https://console.firebase.google.com/project/lumen-20260630/usage/details)
+- **Functions deploy** — project on Spark; needs **Blaze upgrade**. Upgrade: [Firebase usage](https://console.firebase.google.com/project/lumen-20260630/usage/details)
 - **Gmail OAuth server secrets** — set `GMAIL_CLIENT_ID` / `GMAIL_CLIENT_SECRET` on functions after Blaze
-- Prototype reference port **8765** occupied by AgentBroker
+- Prototype reference port **8765** may conflict with AgentBroker — use **8766** locally if busy
 
 ---
 
 ## Next (autonomous)
 
-1. Sub Detail screen + `openSubId` panel
-2. Alerts, Calendar, Mailroom screens
-3. CommandPalette (⌘K), CancellationFlow
-4. Wire Scanning to real sync progress when functions live
-5. Desktop shell (Phase 3)
-6. PWA plugin (Phase 4)
+1. **CommandPalette** — port `command-palette.jsx`; wire `useKeyboard` (recommended runtime harness pilot)
+2. Sub Detail screen + `openSubId` panel
+3. Alerts, Calendar, Mailroom screens
+4. CancellationFlow overlay
+5. Wire Scanning to real sync progress when functions live
+6. Desktop shell (Phase 3)
+7. PWA plugin (Phase 4)
 
 ---
 
-## Tests
+## Tests (last verified 2026-06-30)
 
 ```bash
 npm run build                    # pass
 cd functions && npm run build    # pass
-firebase deploy --only hosting   # pass
+firebase deploy --only hosting   # already deployed — approval for re-deploy
 firebase deploy --only functions # blocked — Blaze required
+```
+
+---
+
+## Paste-ready continuation prompt
+
+```
+Lumen PWA — continue from docs/handoff.md.
+
+Read: docs/handoff.md → docs/agentic-harness.md → AGENTS.md → docs/product-architecture-map.md.
+
+Phase 1 done. Phase 2 partial (functions in repo, not deployed — Blaze blocker).
+
+Next task: Port CommandPalette from public/prototype/command-palette.jsx — wire useKeyboard + uiStore.paletteOpen, read-only search/nav over subs. No Tailwind. Match prototype pixels.
+
+After UI: npm run build. Update docs/handoff.md. Do not deploy or push without approval.
 ```

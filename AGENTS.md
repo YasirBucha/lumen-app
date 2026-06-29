@@ -7,7 +7,7 @@
 > **Project owner:** Yasir Bucha
 > **App:** Lumen — Subscription Intelligence
 > **Tagline:** *See every subscription. Spend with intent.*
-> **Status:** Prototype complete. **Phase 1 PWA in progress** (Vite React shell, SignIn + Dashboard, seed data, Firebase placeholders). See [`docs/handoff.md`](docs/handoff.md).
+> **Status:** Prototype complete. **Phase 1 done** · **Phase 2 partial** (functions scaffold, ConnectGmailFlow, mobile tabs). See [`docs/handoff.md`](docs/handoff.md).
 
 ## Agent harness (read before coding)
 
@@ -498,24 +498,26 @@ If this is not a subscription receipt, return {"is_subscription": false}.
 
 ## Build Phases
 
-### Phase 1 — Shell + Auth + Data (in progress)
+### Phase 1 — Shell + Auth + Data ✅
 1. ~~`npm create vite@latest` + React TS scaffold~~ ✅ (in-repo)
 2. ~~Install deps: `react-router-dom zustand firebase vite-plugin-pwa`~~ ✅
 3. ~~CSS custom properties in `src/styles/tokens.css` + globals~~ ✅
 4. ~~Port primitives → `src/components/primitives/`~~ ✅
-5. ~~Firebase Auth + `SignIn` screen~~ ✅ (needs real `firebase-config.ts`)
-6. ~~Firestore rules in repo~~ ✅ — collections live in console pending
+5. ~~Firebase Auth + `SignIn` screen~~ ✅ (`.env` + `firebase-config.ts`)
+6. ~~Firestore rules in repo~~ ✅
 7. ~~Seed data → `src/lib/seedData.ts`~~ ✅
 8. ~~Dashboard wired to Firestore listener + seed fallback~~ ✅
-9. `firebase deploy --only hosting` → **owner approval required**
+9. ~~AppShell + mobile tabs (Ledger, Verdicts, Patterns, Settings)~~ ✅
+10. ~~Hosting deploy~~ ✅ — re-deploy needs owner approval
 
-### Phase 2 — Gmail Sync + Parsing
-10. Cloud Functions scaffold: `firebase init functions --runtime nodejs20`
-11. `gmailInitialSync` + `gmailIncrementalSync` (scheduled, every 6h)
-12. 10 merchant parsers (see `functions/src/parsers/`)
-13. Gemini fallback parser (user enters API key in Settings)
-14. ConnectGmailFlow overlay wired to real OAuth
-15. Scanning screen wired to real sync progress
+### Phase 2 — Gmail Sync + Parsing (partial)
+11. ~~Cloud Functions scaffold~~ ✅ (`functions/`, Node 20)
+12. ~~`gmailInitialSync`~~ ✅ — deploy blocked (Spark → Blaze)
+13. ~~10 merchant parsers~~ ✅ (`functions/src/parsers/index.ts`)
+14. ~~Gemini fallback parser~~ ✅
+15. ~~ConnectGmailFlow overlay + OAuth client~~ ✅
+16. `gmailIncrementalSync` — stub only
+17. Scanning screen wired to real sync progress — pending functions deploy
 
 ### Phase 3 — Full UI
 16. All remaining mobile screens (port from `public/prototype/*.jsx`)

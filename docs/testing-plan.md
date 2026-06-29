@@ -6,7 +6,7 @@
 
 ## Current state
 
-No Jest/Vitest/Playwright configured. Primary gate is **TypeScript + production build**.
+No Jest/Vitest/Playwright configured. Primary gate is **TypeScript + production build** (frontend + functions).
 
 ---
 
@@ -15,8 +15,11 @@ No Jest/Vitest/Playwright configured. Primary gate is **TypeScript + production 
 | Command | Purpose | When |
 |---------|---------|------|
 | `npm run build` | `tsc -b` + Vite bundle | After TS/React changes |
-| Manual: open `/signin` | Sign-in layout vs prototype | UI work |
-| Manual: open `/` (authed or seed) | Dashboard vs prototype | UI work |
+| `cd functions && npm run build` | Cloud Functions TypeScript | After `functions/src/` changes |
+| Manual: `/signin` | Sign-in layout vs prototype | UI work |
+| Manual: `/` (authed or seed) | Dashboard vs prototype | UI work |
+| Manual: tab routes | `/ledger`, `/verdicts`, `/patterns`, `/settings` | Tab/shell work |
+| Manual: Connect Gmail overlay | OAuth flow (needs configured Firebase) | Phase 2 work |
 
 ---
 
@@ -33,7 +36,7 @@ No Jest/Vitest/Playwright configured. Primary gate is **TypeScript + production 
 
 ## Visual regression
 
-Until automated: keep **prototype on :8765** and **PWA on :5173** side-by-side.
+Until automated: keep **prototype on :8765** (or :8766 if busy) and **PWA on :5173** side-by-side.
 
 Checklist per screen:
 
@@ -62,4 +65,5 @@ Suggested GitHub Action when repo is active:
 # .github/workflows/ci.yml (future)
 - npm ci
 - npm run build
+- cd functions && npm ci && npm run build
 ```

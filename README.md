@@ -20,7 +20,7 @@ Lumen is a Gmail-connected subscription intelligence app. It reads receipts and 
 |---|---|
 | `public/prototype/` | Complete high-fidelity interactive prototype (React + Babel, runs in browser) |
 | `public/prototype/index.html` | Visual source of truth — open in browser or serve on port **8765** |
-| `src/` | Production Vite + React 18 + TypeScript PWA (Phase 1 in progress) |
+| `src/` | Production Vite + React 18 + TypeScript PWA (Phase 1 complete; Phase 2 partial) |
 | `AGENTS.md` | **Full build plan** — read after `docs/handoff.md` |
 | `docs/agentic-harness.md` | Dev agent rules, ports, testing, handoff protocol |
 | `docs/handoff.md` | Current phase and exact next step for agents |

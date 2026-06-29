@@ -46,8 +46,8 @@ Lumen already has **product intelligence** (verdicts, evidence, price watch). A 
 |-------|--------|
 | **Idea** | During `Scanning` screen, harness reports parse progress, merchant discoveries, errors; routes to parser registry + Gemini fallback. |
 | **User benefit** | Transparency during long initial sync (5000 msg cap). |
-| **Where in app** | `Scanning` screen; Firestore `gmail_accounts.status`. |
-| **Reuse** | `functions/gmailSync.ts`, parser registry, `geminiParser.ts`. |
+| **Where in app** | `ConnectGmailFlow` (`src/components/overlays/`); `Scanning` screen; Firestore `gmail_accounts.status`. |
+| **Reuse** | `gmailConnect.ts`, `useGmailAccounts`, `functions/gmailSync.ts`, parser registry, `geminiParser.ts`. |
 | **Safety risks** | Exposing email snippets in UI logs; token scope misuse. |
 | **Start read-only?** | Progress display only first. |
 | **Approval gates** | Gmail connect = explicit OAuth; Gemini = BYOK in Settings. |
@@ -94,8 +94,8 @@ Lumen already has **product intelligence** (verdicts, evidence, price watch). A 
 |-------|--------|
 | **Idea** | Harness coordinates multi-account Gmail: which mailbox to scan, merge dedupe rules, empty-state guidance. |
 | **User benefit** | Family/work/personal split (seed data already models accounts). |
-| **Where in app** | TopMeta account switcher; `ConnectGmailFlow`; `EmptyDashboard`. |
-| **Reuse** | `ACCOUNTS`, `gmail_accounts` collection, connect flow prototype. |
+| **Where in app** | TopMeta account switcher; `ConnectGmailFlow` (implemented); `EmptyDashboard`. |
+| **Reuse** | `useGmailAccounts`, `gmailConnect.ts`, `gmail_accounts` collection, connect flow prototype. |
 | **Safety risks** | Cross-account data leak in UI filter bugs. |
 | **Start read-only?** | Filter/switch only first. |
 | **Approval gates** | New Gmail connect per account. |
@@ -108,7 +108,7 @@ Lumen already has **product intelligence** (verdicts, evidence, price watch). A 
 
 **Command palette agent (Opportunity 4)** — read-only v1:
 
-1. Wire existing `useKeyboard` → palette open state.  
+1. Wire existing `useKeyboard` → `uiStore.paletteOpen` (hook exists; palette component missing).  
 2. Port `command-palette.jsx` UI.  
 3. Implement search over in-memory/Firestore subs (merchant, category, verdict).  
 4. Actions: navigate to sub detail, filter ledger — **no writes**.  

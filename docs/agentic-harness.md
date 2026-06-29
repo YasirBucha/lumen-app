@@ -31,9 +31,9 @@ Visual source of truth: `public/prototype/` (open `index.html` or serve on port 
 | Phase | Scope | Status |
 |-------|--------|--------|
 | **0** | Design prototype in `public/prototype/` | ✅ Complete |
-| **1** | Vite shell, primitives, SignIn, Dashboard, Firebase wiring, seed data | 🟡 In progress — build passes; Firebase config placeholder; deploy pending |
-| **2** | Cloud Functions, Gmail sync, parsers, Gemini | ⏳ Not started |
-| **3** | All mobile + desktop screens, overlays | ⏳ Not started |
+| **1** | Vite shell, primitives, auth, AppShell, mobile tabs, seed/Firestore | ✅ Complete — build passes; hosting deployed |
+| **2** | Cloud Functions, Gmail sync, parsers, ConnectGmailFlow | 🟡 Partial — functions scaffold + 10 parsers in repo; **deploy blocked on Blaze** |
+| **3** | Sub Detail, Alerts, Calendar, Mailroom, desktop, overlays (⌘K, cancel, tour) | ⏳ Not started |
 | **4** | PWA manifest, offline, FCM | ⏳ Not started |
 
 ---
@@ -67,8 +67,9 @@ Visual source of truth: `public/prototype/` (open `index.html` or serve on port 
 | Path | Reason |
 |------|--------|
 | `public/prototype/` | Read-only visual spec; do not “modernize” |
-| `src/lib/firebase-config.ts` | Secrets — placeholders only in repo |
-| `.env`, `.dev.vars` | Gitignored credentials |
+| `src/lib/firebase-config.ts` | Reads `VITE_*` from `.env` — do not commit real values |
+| `.env` | Gitignored — local Firebase keys (file exists on owner machine) |
+| `.env.example` | Safe template only |
 | `lumen-handoff.tar.gz` | Original handoff archive |
 | `firestore.rules` | Security — review before deploy |
 | `node_modules/`, `dist/` | Generated |
@@ -95,9 +96,13 @@ npm run preview      # preview prod build → http://127.0.0.1:4173
 python3 -m http.server 8765 --directory public/prototype
 # → http://127.0.0.1:8765/index.html
 
+# Cloud Functions (TypeScript)
+cd functions && npm install && npm run build
+
 # Firebase (after config + CLI login) — owner approval for deploy
 firebase emulators:start   # optional local backend
-firebase deploy --only hosting   # APPROVAL REQUIRED
+firebase deploy --only hosting   # APPROVAL REQUIRED — already deployed once
+firebase deploy --only functions # APPROVAL REQUIRED — blocked until Blaze upgrade
 ```
 
 ---
@@ -108,8 +113,9 @@ firebase deploy --only hosting   # APPROVAL REQUIRED
 |---------|------|-----|--------|
 | **Lumen PWA dev** | **5173** | `http://127.0.0.1:5173` | Vite default — primary dev |
 | **Lumen preview** | **4173** | `http://127.0.0.1:4173` | `npm run preview` |
-| **Prototype reference** | **8765** | `http://127.0.0.1:8765/index.html` | Static; compare side-by-side |
+| **Prototype reference** | **8765** | `http://127.0.0.1:8765/index.html` | Static; **may conflict with AgentBroker** — use alternate port if busy |
 | Legacy Wrangler/PM2 | 3000 | — | **Deprecated** — conflicts with ecosystem policy |
+| **Firebase Hosting (prod)** | HTTPS | `https://lumen-20260630.web.app` | Deployed; not a local port |
 
 **Registry:** `/Users/yb/Dev/ai-rules/local-port-registry.md` (Lumen row added 2026-06-30).
 
@@ -122,10 +128,11 @@ See [`docs/testing-plan.md`](testing-plan.md).
 Quick gate:
 
 ```bash
-npm run build    # typecheck (tsc -b) + production bundle
+npm run build                      # frontend: tsc -b + vite bundle
+cd functions && npm run build      # Cloud Functions TypeScript
 ```
 
-No unit test runner configured yet.
+No unit test runner configured yet. See [`docs/testing-plan.md`](testing-plan.md).
 
 ---
 
@@ -158,12 +165,24 @@ No unit test runner configured yet.
 
 ## Known risks
 
-- `README.md` was partially stale (Hono era); harness docs supersede for run commands.  
-- `firebase-config.ts` uses placeholders — Auth/Firestore fail until configured.  
+- `README.md` partially stale on phase labels — **harness docs supersede** for run commands and status.  
+- `.env` holds Firebase keys locally — never commit or echo in chat.  
 - `vite-plugin-pwa` installed but not wired in `vite.config.ts` yet (Phase 4).  
-- `functions/` directory not scaffolded yet.  
-- Prototype uses fixed date `2026-06-29` in seed/helpers — keep consistent until real data.  
-- Dual hosting artifacts (Firebase + Wrangler) may confuse agents — treat Firebase as canonical.
+- **Functions deploy blocked** — Firebase project on Spark; needs Blaze + `GMAIL_CLIENT_ID` / `GMAIL_CLIENT_SECRET` on functions.  
+- `gmailIncrementalSync` is a stub; real historyId tracking not implemented.  
+- `refreshTokenEnc` in client currently stores access token — encryption/TODO before production.  
+- Prototype uses fixed date `2026-06-29` in seed/helpers — keep consistent until real Gmail data.  
+- Dual hosting artifacts (Firebase + `wrangler.jsonc`) may confuse agents — **Firebase is canonical**.  
+- Port **8765** shared with AgentBroker on this Mac — pick another port for prototype if conflict.
+
+## Unresolved conflicts
+
+| Conflict | Resolution |
+|----------|------------|
+| Firebase vs Wrangler hosting | Use Firebase (`firebase.json`); ignore Wrangler unless owner switches |
+| Phase labels in AGENTS.md vs handoff | Handoff + this file are live status; AGENTS.md spec lags slightly |
+| Prototype port 8765 vs AgentBroker | Serve prototype on e.g. **8766** locally if 8765 busy |
+| Autonomous deploy vs harness “approval required” | Destructive/risky still needs approval; routine doc/build OK autonomous |
 
 ---
 

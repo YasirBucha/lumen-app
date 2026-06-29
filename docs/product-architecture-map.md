@@ -8,8 +8,8 @@
 ## What the app does
 
 1. User signs in with Google (Firebase Auth).  
-2. User connects Gmail (OAuth refresh token stored encrypted — Phase 2).  
-3. Backend scans billing/receipt emails, parses subscriptions.  
+2. User connects Gmail (OAuth; refresh token stored in Firestore — encryption TODO).  
+3. Backend scans billing/receipt emails, parses subscriptions (Cloud Functions — deploy pending Blaze).  
 4. App shows ledger: active/past/upcoming subs, PKR/USD amounts, renewal calendar, AI verdicts (Keep / Review / Cancel).  
 5. User can act: cancel flow, command palette search, settings (theme, currency, Gemini BYOK key).
 
@@ -21,17 +21,20 @@
 
 | Module | Path | Role |
 |--------|------|------|
-| Entry | `main.tsx`, `App.tsx` | Router, auth gate, theme init |
-| Screens | `screens/` | SignIn, Dashboard (+ Ledger, Verdicts, … planned) |
+| Entry | `main.tsx`, `App.tsx` | Router, auth gate, theme init, ConnectGmailFlow mount |
+| Screens | `screens/` | SignIn, Scanning, Dashboard, Ledger, Verdicts, Patterns, Settings |
+| Layout | `components/layout/` | AppShell, BottomTabBar (mobile tabs) |
+| Overlays | `components/overlays/` | ConnectGmailFlow (Gmail OAuth + scan trigger) |
 | Primitives | `components/primitives/` | Editorial UI atoms (Masthead, StatHero, VerdictTag, …) |
 | Dashboard widgets | `components/dashboard/` | Trend, categories, price alerts, empty state |
-| State | `store/` | Zustand: auth, subscriptions, UI |
-| Hooks | `hooks/` | Firestore subs, theme, ⌘K |
-| Lib | `lib/` | Firebase, format, seedData |
+| State | `store/` | Zustand: auth, subscriptions, UI (incl. palette open stub) |
+| Hooks | `hooks/` | Firestore subs, Gmail accounts, theme, ⌘K (`useKeyboard`) |
+| Lib | `lib/` | Firebase, format, seedData, gmailConnect |
 | Types | `types/index.ts` | Subscription, Verdict, preferences |
 | Styles | `styles/` | tokens.css, globals, typography |
+| Backend | `functions/src/` | gmailInitialSync, parsers, Gemini fallback |
 
-**Not yet in repo:** `functions/`, `components/layout/`, `components/overlays/`, `desktop/`, most `screens/*`.
+**Not yet in repo:** `desktop/`, CommandPalette, CancellationFlow, OnboardingTour, SubDetail, Alerts, Calendar, Mailroom.
 
 ---
 
@@ -42,19 +45,25 @@
 | Surface | Route | Prototype ref |
 |---------|-------|----------------|
 | Sign In | `/signin` | `screens-mobile.jsx` |
-| Dashboard | `/` | `screens-mobile-main.jsx` |
+| Scanning | `/scanning` | `screens-mobile.jsx` |
+| Dashboard (Today) | `/` | `screens-mobile-main.jsx` |
+| Ledger | `/ledger` | `screens-mobile-main.jsx` |
+| Verdicts | `/verdicts` | `screens-mobile-aux.jsx` |
+| Patterns (Shape) | `/patterns` | `screens-mobile-aux.jsx` |
+| Settings (Office) | `/settings` | `screens-mobile-aux.jsx` |
+| Connect Gmail overlay | global (authed) | `connect-gmail-flow.jsx` |
 
 ### Planned — mobile (`screens/`)
 
-SignIn, Scanning, Dashboard, Ledger, SubDetail, Alerts, Calendar, Verdicts, Patterns, Mailroom, Settings.
+SubDetail, Alerts, Calendar, Mailroom (+ polish on existing tab screens).
 
 ### Planned — desktop (`desktop/`)
 
 DeskHome, DeskLedger, DeskAlerts, DeskCalendar, DeskVerdicts, DeskShape, DeskMailroom, DeskOffice, DeskSubPanel (460px panel).
 
-### Overlays
+### Overlays (planned)
 
-CommandPalette, ConnectGmailFlow, CancellationFlow, OnboardingTour.
+CommandPalette, CancellationFlow, OnboardingTour.
 
 ### Reference only
 
@@ -69,7 +78,7 @@ CommandPalette, ConnectGmailFlow, CancellationFlow, OnboardingTour.
 | Collection / doc | Purpose |
 |------------------|---------|
 | User profile | email, displayName, plan |
-| `gmail_accounts/{id}` | refresh token (encrypted), sync status |
+| `gmail_accounts/{id}` | refresh token (encrypted — TODO), sync status |
 | `subscriptions/{id}` | ledger rows — merchant, amounts, verdict, history |
 | `receipts/{id}` | raw email parse audit trail |
 | `preferences` | currency, theme, Gemini key (encrypted), tourDone |
@@ -83,20 +92,22 @@ Region: **asia-south1**. Rules: owner uid only (`firestore.rules`).
 
 ### Client state (Zustand)
 
-Ephemeral: active mailbox filter, open sub id, UI sheets, theme, currency.
+Ephemeral: active mailbox filter, open sub id, UI sheets, theme, currency, command palette open.
 
 ---
 
-## Sync / API / background jobs (planned)
+## Sync / API / background jobs
 
-| Job | Trigger | Location |
-|-----|---------|----------|
-| `gmailInitialSync` | Callable after Gmail connect | `functions/src/gmailSync.ts` |
-| `gmailIncrementalSync` | Scheduled every 6h | same |
-| Parser layer | Per message | `functions/src/parsers/*.ts` |
-| Gemini fallback | Low confidence / no match | `functions/src/geminiParser.ts` |
+| Job | Trigger | Location | Status |
+|-----|---------|----------|--------|
+| `gmailInitialSync` | Callable after Gmail connect | `functions/src/gmailSync.ts` | Code ready; deploy blocked (Blaze) |
+| `gmailIncrementalSync` | Scheduled every 6h | `functions/src/index.ts` | Stub only |
+| Parser layer | Per message | `functions/src/parsers/index.ts` | 10 merchants in single registry file |
+| Gemini fallback | Low confidence / no match | `functions/src/geminiParser.ts` | Implemented |
 
 Gmail scope: `gmail.readonly`. Gemini: user BYOK from preferences.
+
+Client: `src/lib/gmailConnect.ts` — OAuth popup, Firestore write, calls `gmailInitialSync`.
 
 ---
 
@@ -104,21 +115,22 @@ Gmail scope: `gmail.readonly`. Gemini: user BYOK from preferences.
 
 | Service | Status |
 |---------|--------|
-| Firebase Auth (Google) | Wired in code; config placeholder |
+| Firebase Auth (Google) | Wired; keys via `.env` / `firebase-config.ts` |
 | Firestore | Wired listener; rules in repo |
-| Firebase Hosting | Config ready; not deployed |
-| Cloud Functions | Not scaffolded |
-| Gmail API | Phase 2 |
-| Gemini API | Phase 2 (BYOK) |
+| Firebase Hosting | **Deployed** — `lumen-20260630.web.app` |
+| Cloud Functions | Scaffolded in repo; **not deployed** (Spark → Blaze) |
+| Gmail API | Client OAuth wired; server secrets pending |
+| Gemini API | Parser fallback in functions; BYOK in Settings (UI partial) |
 | FCM push | Phase 4 |
 
 ---
 
 ## AI / automation today
 
-- **Prototype:** static verdicts + evidence strings in seed data.  
-- **Planned:** deterministic parsers + Gemini structured JSON extraction.  
-- **Runtime agent harness (product):** not implemented — see `docs/runtime-harness-opportunities.md`.
+- **Prototype + seed:** static verdicts + evidence strings.  
+- **Functions:** deterministic parsers + Gemini structured JSON extraction (undeployed).  
+- **Runtime agent harness (product):** not implemented — see `docs/runtime-harness-opportunities.md`.  
+- **Dev agent harness:** `docs/agentic-harness.md`, `AGENTS.md`, tool entry points.
 
 ---
 
@@ -128,7 +140,9 @@ Gmail scope: `gmail.readonly`. Gemini: user BYOK from preferences.
 |------|---------|
 | 5173 | Vite dev (PWA) |
 | 4173 | Vite preview |
-| 8765 | Static prototype server |
+| 8765 | Static prototype server (may conflict — see harness) |
+
+Registry: `/Users/yb/Dev/ai-rules/local-port-registry.md`
 
 ---
 
@@ -136,12 +150,14 @@ Gmail scope: `gmail.readonly`. Gemini: user BYOK from preferences.
 
 | Item | Notes |
 |------|--------|
-| Phase 1 PWA | Partial — 2 screens |
-| `wrangler.jsonc`, `ecosystem.config.cjs` | Legacy Cloudflare path |
+| Phase 2 backend | Functions code in repo; Blaze + OAuth secrets needed to deploy |
+| Sub Detail, Alerts, Calendar, Mailroom | Not ported |
+| CommandPalette | `useKeyboard` + `uiStore.paletteOpen` stub only |
 | `vite-plugin-pwa` | Dependency only; not in vite config |
-| `functions/` | Missing |
-| Desktop responsive shell | `AppShell.tsx` not created |
+| Desktop responsive shell | AppShell is mobile tabs only |
+| `wrangler.jsonc`, `ecosystem.config.cjs` | Legacy Cloudflare path |
 | Fixed “today” date in format helpers | Matches prototype demo date |
+| Token storage | `refreshTokenEnc` naming; encryption not production-ready |
 
 ---
 
@@ -176,4 +192,4 @@ flowchart LR
 
 ## For future agents
 
-When adding a feature, update this doc’s **Implemented** tables and **Incomplete** list in the same PR/commit as the feature (or handoff if no commit yet).
+When adding a feature, update this doc’s **Implemented** tables and **Incomplete** list in the same commit as the feature (or handoff if no commit yet).
