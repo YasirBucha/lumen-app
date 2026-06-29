@@ -19,9 +19,11 @@ Lumen is a Gmail-connected subscription intelligence app. It reads receipts and 
 | Path | What it is |
 |---|---|
 | `public/prototype/` | Complete high-fidelity interactive prototype (React + Babel, runs in browser) |
-| `public/prototype/index.html` | Open this in a browser to see the full working prototype |
-| `src/index.tsx` | Hono server that serves the prototype (for online preview) |
-| `AGENTS.md` | **Full build plan for Cursor / AI agents** — read this before writing any production code |
+| `public/prototype/index.html` | Visual source of truth — open in browser or serve on port **8765** |
+| `src/` | Production Vite + React 18 + TypeScript PWA (Phase 1 in progress) |
+| `AGENTS.md` | **Full build plan** — read after `docs/handoff.md` |
+| `docs/agentic-harness.md` | Dev agent rules, ports, testing, handoff protocol |
+| `docs/handoff.md` | Current phase and exact next step for agents |
 
 ---
 
@@ -33,10 +35,9 @@ The prototype runs **entirely in the browser** — no build step needed.
 # Option 1: Open directly in browser (simplest)
 open public/prototype/index.html
 
-# Option 2: Serve it locally (avoids any CORS issues)
-cd public/prototype
-npx serve .
-# → http://localhost:3000
+# Option 2: Serve locally (recommended for agents)
+python3 -m http.server 8765 --directory public/prototype
+# → http://127.0.0.1:8765/index.html
 ```
 
 The prototype is the **visual and interaction source of truth** for all production development.
@@ -59,20 +60,12 @@ Read **`AGENTS.md`** — it contains the complete engineering brief including:
 ### Quick Start for Production Build
 
 ```bash
-# 1. Create the new production repo
-npm create vite@latest lumen-app -- --template react-ts
-cd lumen-app
+cd /Users/yb/Dev/projects/Lumen
+npm install
+npm run dev
+# → http://127.0.0.1:5173
 
-# 2. Install dependencies
-npm install react-router-dom zustand firebase vite-plugin-pwa
-
-# 3. Copy design reference
-cp -r ../lumen-prototype/public/prototype/ ./public/prototype/
-
-# 4. Copy AGENTS.md into the new repo
-cp ../lumen-prototype/AGENTS.md ./AGENTS.md
-
-# 5. Follow Phase 1 in AGENTS.md
+# See docs/handoff.md for current phase and docs/agentic-harness.md for agent rules
 ```
 
 ---
@@ -99,10 +92,10 @@ cp ../lumen-prototype/AGENTS.md ./AGENTS.md
 ### ✅ Prototype (100% complete)
 All 10 mobile screens, 8 desktop views, 5 overlays, full design system.
 
-### ⏳ Production PWA (to be built in Cursor)
+### ⏳ Production PWA
 | Phase | Features | Status |
 |---|---|---|
-| Phase 1 | PWA scaffold + Firebase Auth + Firestore + Dashboard | ⏳ Pending |
+| Phase 1 | PWA scaffold + Firebase Auth + Firestore + Dashboard | 🟡 In progress |
 | Phase 2 | Gmail Cloud Functions + 10 parsers + Gemini fallback | ⏳ Pending |
 | Phase 3 | All screens rebuilt in React/TS + responsive layout | ⏳ Pending |
 | Phase 4 | Offline mode + push notifications + PWA polish | ⏳ Pending |

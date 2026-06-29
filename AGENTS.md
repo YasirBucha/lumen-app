@@ -1,9 +1,25 @@
+# Global Rules Reference
+> [!IMPORTANT]
+> This project follows global development standards. ALWAYS read [GLOBAL_AGENTS.md](file:///GLOBAL_AGENTS.md) or [global-agents.md](file:///Users/yb/Dev/ai-rules/global-agents.md) first to align on universal instructions.
+
 # AGENTS.md — Lumen PWA: Full Build Context for Cursor / AI Agents
 
 > **Project owner:** Yasir Bucha
 > **App:** Lumen — Subscription Intelligence
 > **Tagline:** *See every subscription. Spend with intent.*
-> **Status:** Design prototype 100% complete. Production PWA build begins here.
+> **Status:** Prototype complete. **Phase 1 PWA in progress** (Vite React shell, SignIn + Dashboard, seed data, Firebase placeholders). See [`docs/handoff.md`](docs/handoff.md).
+
+## Agent harness (read before coding)
+
+| Order | Doc |
+|-------|-----|
+| 1 | [`docs/handoff.md`](docs/handoff.md) — current phase, next step |
+| 2 | [`docs/agentic-harness.md`](docs/agentic-harness.md) — safe edits, ports, commit/deploy rules |
+| 3 | This file — full spec |
+| 4 | [`docs/product-architecture-map.md`](docs/product-architecture-map.md) |
+| 5 | [`public/prototype/index.html`](public/prototype/index.html) — visual source of truth |
+
+Tool entry points: [`CURSOR.md`](CURSOR.md) · [`CODEX.md`](CODEX.md) · [`GEMINI.md`](GEMINI.md) · [`CLAUDE.md`](CLAUDE.md)
 
 ---
 
@@ -482,16 +498,16 @@ If this is not a subscription receipt, return {"is_subscription": false}.
 
 ## Build Phases
 
-### Phase 1 — Shell + Auth + Data (start here)
-1. `npm create vite@latest lumen-app -- --template react-ts`
-2. Install deps: `react-router-dom zustand firebase vite-plugin-pwa`
-3. Set up CSS custom properties from `tokens.jsx` in `src/styles/globals.css`
-4. Port all primitives from `public/prototype/primitives.jsx` to `src/components/primitives/`
-5. Wire Firebase Auth (Google provider) — implement `ScreenSignIn`
-6. Firestore schema: create collections, write security rules
-7. Seed data: port `public/prototype/data.jsx` as TypeScript constant for first render
-8. Dashboard screen wired to Firestore (falls back to seed data if empty)
-9. `firebase deploy --only hosting` → get live URL
+### Phase 1 — Shell + Auth + Data (in progress)
+1. ~~`npm create vite@latest` + React TS scaffold~~ ✅ (in-repo)
+2. ~~Install deps: `react-router-dom zustand firebase vite-plugin-pwa`~~ ✅
+3. ~~CSS custom properties in `src/styles/tokens.css` + globals~~ ✅
+4. ~~Port primitives → `src/components/primitives/`~~ ✅
+5. ~~Firebase Auth + `SignIn` screen~~ ✅ (needs real `firebase-config.ts`)
+6. ~~Firestore rules in repo~~ ✅ — collections live in console pending
+7. ~~Seed data → `src/lib/seedData.ts`~~ ✅
+8. ~~Dashboard wired to Firestore listener + seed fallback~~ ✅
+9. `firebase deploy --only hosting` → **owner approval required**
 
 ### Phase 2 — Gmail Sync + Parsing
 10. Cloud Functions scaffold: `firebase init functions --runtime nodejs20`
