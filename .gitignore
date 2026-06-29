@@ -19,8 +19,33 @@ node_modules/
 
 # env
 .env
+.env.local
+.env.*.local
 .env.production
 .dev.vars
+
+# firebase local / debug
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+.runtimeconfig.json
+
+# functions build output
+functions/lib/
+
+# graphify
+graphify-out/cache/
+graphify-out/memory/
+
+# archives / handoffs
+*.tar.gz
+*.zip
+
+# credentials (never commit)
+**/serviceAccount*.json
+**/credentials.json
+google-services.json
+GoogleService-Info.plist
 
 # logs
 logs/
@@ -31,11 +56,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# graphify
-graphify-out/cache/
-
-# handoff archives
-lumen-handoff.tar.gz
-
 # misc
 .DS_Store
+Thumbs.db
