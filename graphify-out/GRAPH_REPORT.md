@@ -5,12 +5,12 @@
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 746 nodes · 1629 edges · 48 communities (39 shown, 9 thin omitted)
+- 746 nodes · 1629 edges · 48 communities (38 shown, 10 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 2 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `339b5a31`
+- Built from commit: `d72c4803`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -85,7 +85,7 @@
 - `ScreenSubDetail()` --calls--> `verdictHeadline()`  [EXTRACTED]
   public/prototype/screens-mobile-main.jsx → src/lib/verdictCopy.ts
 
-## Communities (48 total, 9 thin omitted)
+## Communities (48 total, 10 thin omitted)
 
 ### Community 0 - "Community 0"
 Cohesion: 0.1
@@ -161,7 +161,7 @@ Nodes (10): numberWord(), PriceIncreaseCard(), FlowIconName, CancellationFlow(),
 
 ### Community 18 - "Community 18"
 Cohesion: 0.27
-Nodes (8): BigNumber(), BigNumberProps, Mono(), MonoProps, StatHero(), StatHeroProps, EditorialRow(), VerdictTag()
+Nodes (8): BigNumber(), BigNumberProps, Mono(), MonoProps, StatHero(), StatHeroProps, BigNumber(), EditorialRow()
 
 ### Community 20 - "Community 20"
 Cohesion: 0.18
@@ -181,7 +181,7 @@ Nodes (9): graphify, Context window handoff (all projects), Core Directives & Au
 
 ### Community 24 - "Community 24"
 Cohesion: 0.25
-Nodes (5): LumenLogoProps, SectionHeaderProps, LumenLogo(), SectionHeader(), ThemeTokens
+Nodes (6): LumenLogoProps, Tab, TabRow(), TabRowProps, LumenLogo(), ThemeTokens
 
 ### Community 25 - "Community 25"
 Cohesion: 0.22
@@ -219,10 +219,6 @@ Nodes (5): Build Phases, Phase 1 — Shell + Auth + Data ✅, Phase 2 — Gmail 
 Cohesion: 0.4
 Nodes (5): code:bash (cd /Users/yb/Dev/projects/Lumen), Local run commands, Building the Production PWA, code:bash (cd /Users/yb/Dev/projects/Lumen), Quick Start for Production Build
 
-### Community 37 - "Community 37"
-Cohesion: 0.5
-Nodes (3): Tab, TabRow(), TabRowProps
-
 ### Community 39 - "Community 39"
 Cohesion: 0.5
 Nodes (4): Do, Do not (without owner approval), Safe-edit rules, Do not run without approval
@@ -234,7 +230,7 @@ Nodes (3): code:json ({ "projects": { "default": "YOUR_PROJECT_ID" } }), code:ba
 ## Knowledge Gaps
 - **186 isolated node(s):** `CANDIDATE_INBOXES`, `MERGE_SAMPLE`, `FUTURE_KINDS`, `CARD_KINDS`, `CATEGORIES` (+181 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
