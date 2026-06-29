@@ -34,5 +34,8 @@ lerna-debug.log*
 # graphify
 graphify-out/cache/
 
+# handoff archives
+lumen-handoff.tar.gz
+
 # misc
 .DS_Store
