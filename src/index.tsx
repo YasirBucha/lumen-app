@@ -5,8 +5,8 @@ const app = new Hono()
 
 // Serve assets (og-card, images)
 app.use('/assets/*', serveStatic({ root: './' }))
-// Serve static files
-app.use('/static/*', serveStatic({ root: './public' }))
+// Serve prototype reference files
+app.use('/prototype/*', serveStatic({ root: './public' }))
 
 // Serve main app
 app.get('/', (c) => {
@@ -49,24 +49,24 @@ const HTML = `<!DOCTYPE html>
 </head>
 <body>
   <div id="root"></div>
-  <script type="text/babel" src="/static/tokens.jsx"></script>
-  <script type="text/babel" src="/static/data.jsx"></script>
-  <script type="text/babel" src="/static/primitives.jsx"></script>
-  <script type="text/babel" src="/static/ios_frame.jsx"></script>
-  <script type="text/babel" src="/static/tweaks_panel.jsx"></script>
-  <script type="text/babel" src="/static/sub-detail-extras.jsx"></script>
-  <script type="text/babel" src="/static/alerts-inbox.jsx"></script>
-  <script type="text/babel" src="/static/renewal-calendar.jsx"></script>
-  <script type="text/babel" src="/static/command-palette.jsx"></script>
-  <script type="text/babel" src="/static/onboarding-tour.jsx"></script>
-  <script type="text/babel" src="/static/screens-mobile.jsx"></script>
-  <script type="text/babel" src="/static/screens-mobile-main.jsx"></script>
-  <script type="text/babel" src="/static/screens-mobile-aux.jsx"></script>
-  <script type="text/babel" src="/static/screen-desktop-aux.jsx"></script>
-  <script type="text/babel" src="/static/screen-desktop.jsx"></script>
-  <script type="text/babel" src="/static/connect-gmail-flow.jsx"></script>
-  <script type="text/babel" src="/static/dashboard-cards.jsx"></script>
-  <script type="text/babel" src="/static/app.jsx"></script>
+  <script type="text/babel" src="/prototype/tokens.jsx"></script>
+  <script type="text/babel" src="/prototype/data.jsx"></script>
+  <script type="text/babel" src="/prototype/primitives.jsx"></script>
+  <script type="text/babel" src="/prototype/ios_frame.jsx"></script>
+  <script type="text/babel" src="/prototype/tweaks_panel.jsx"></script>
+  <script type="text/babel" src="/prototype/sub-detail-extras.jsx"></script>
+  <script type="text/babel" src="/prototype/alerts-inbox.jsx"></script>
+  <script type="text/babel" src="/prototype/renewal-calendar.jsx"></script>
+  <script type="text/babel" src="/prototype/command-palette.jsx"></script>
+  <script type="text/babel" src="/prototype/onboarding-tour.jsx"></script>
+  <script type="text/babel" src="/prototype/screens-mobile.jsx"></script>
+  <script type="text/babel" src="/prototype/screens-mobile-main.jsx"></script>
+  <script type="text/babel" src="/prototype/screens-mobile-aux.jsx"></script>
+  <script type="text/babel" src="/prototype/screen-desktop-aux.jsx"></script>
+  <script type="text/babel" src="/prototype/screen-desktop.jsx"></script>
+  <script type="text/babel" src="/prototype/connect-gmail-flow.jsx"></script>
+  <script type="text/babel" src="/prototype/dashboard-cards.jsx"></script>
+  <script type="text/babel" src="/prototype/app.jsx"></script>
 </body>
 </html>`
 

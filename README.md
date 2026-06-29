@@ -2,144 +2,127 @@
 
 > *See every subscription. Spend with intent.*
 
-**Prototype Vol. III** — High-fidelity interactive prototype by Yasir Bucha.  
-Editorial newspaper × fintech ledger design language. Gmail-connected subscription intelligence app.
-
----
-
-## Live URL
-- **Sandbox:** https://3000-iudrnfk8yx6m0c500ylk7-8f57ffe2.sandbox.novita.ai
+**Designed by Yasir Bucha · Prototype Vol. III**
 
 ---
 
 ## What Is Lumen?
 
-Lumen reads Gmail receipts and renewal notices, parses them into a structured ledger, and surfaces every active / past / upcoming subscription with **verified financials** and **evidence-based verdicts** (Keep / Review / Cancel).
+Lumen is a Gmail-connected subscription intelligence app. It reads receipts and renewal notices from Gmail, parses them into a structured ledger, and surfaces every active/past/upcoming subscription with **verified financials** and **evidence-based verdicts** (Keep / Review / Cancel).
 
-**Market wedge:** In Pakistan, bank transaction enrichment APIs (Plaid, Tink) don't exist. Gmail is the only universal source of truth for subscription payments. Lumen owns the email-receipt-parsing space.
-
----
-
-## Screens & Features — Implementation Status
-
-### ✅ COMPLETED (100% of prototype screens)
-
-#### Mobile Screens (10/10)
-| Screen | Status | Description |
-|--------|--------|-------------|
-| 01. Sign In | ✅ | Editorial cover, Gmail OAuth CTA, passkey option |
-| 02. Scanning | ✅ | Live sync progress, % counter, stat strip |
-| 03. Dashboard | ✅ | Monthly spend hero, sparkline, Up Next, Price Watch card |
-| 04. The Ledger | ✅ | Full subscription list, search, tab filter, editorial rows |
-| 05. Sub Detail | ✅ | Price history sparkline, shared-with, verdict history, cancel flow |
-| 06. Alerts Inbox | ✅ | Price increases, KPI strip, Coming Soon placeholders |
-| 07. Renewal Calendar | ✅ | Week strip, month grid, day detail panel |
-| 08. Verdicts | ✅ | Reclaim hero, group sections, PriceJumpRow evidence |
-| 09. Spending Shape | ✅ | Bar chart, donut chart, payment breakdown, annualized commitment |
-| 10. Mailroom / Accounts | ✅ | Connected Gmail accounts, connect new Gmail |
-| 11. Office / Settings | ✅ | Currency, AI tone, theme, notifications, CSV export |
-
-#### Desktop Views (8/8)
-| View | Status |
-|------|--------|
-| D1. Dashboard (DeskHome) | ✅ |
-| D2. Ledger (DeskLedger) | ✅ |
-| D3. Alerts (DeskAlerts) | ✅ |
-| D4. Calendar (DeskCalendar) | ✅ |
-| D5. Verdicts (DeskVerdicts) | ✅ |
-| D6. Shape (DeskShape) | ✅ |
-| D7. Mailroom (DeskMailroom) | ✅ |
-| D8. Office (DeskOffice) | ✅ |
-| Sub Detail Panel (slide-in) | ✅ |
-
-#### Overlays & Flows (5/5)
-| Component | Status |
-|-----------|--------|
-| ConnectGmailFlow (4-step) | ✅ |
-| CancellationFlow (3-step) | ✅ |
-| CommandPalette (⌘K) | ✅ |
-| OnboardingTour (5 spreads) | ✅ |
-| Sheets (Account/Card/Category) | ✅ |
+**Market:** Pakistan-first (PKR primary, no bank-API enrichment available — Gmail is the only universal source of truth).
 
 ---
 
-## Completion Summary
+## This Repo: What's Inside
 
-| Category | Done | Total | % |
-|----------|------|-------|---|
-| Mobile screens | 10 | 10 | **100%** |
-| Desktop views | 8 | 8 | **100%** |
-| Overlays/Flows | 5 | 5 | **100%** |
-| Design tokens | ✅ | — | **100%** |
-| Data layer | ✅ | — | **100%** |
-| **TOTAL PROTOTYPE** | **23/23** | **23** | **100%** |
-
-### ⏳ PENDING (Production backend — out of prototype scope)
-| Feature | Notes |
-|---------|-------|
-| Firebase Auth (real Google OAuth) | Needs Firebase project setup |
-| Gmail API integration | Needs restricted scope verification |
-| Receipt parser (deterministic rules) | 20+ merchant parsers |
-| LLM fallback parsing | Claude/Gemini API |
-| Firestore data persistence | Replace localStorage |
-| Cloud Functions (sync jobs) | Gmail initial + incremental sync |
-| Push notifications | Price alerts via FCM |
-| PWA service worker | Offline support |
-| Google OAuth verification | ~6 weeks, ~$12k CASA audit |
+| Path | What it is |
+|---|---|
+| `public/prototype/` | Complete high-fidelity interactive prototype (React + Babel, runs in browser) |
+| `public/prototype/index.html` | Open this in a browser to see the full working prototype |
+| `src/index.tsx` | Hono server that serves the prototype (for online preview) |
+| `AGENTS.md` | **Full build plan for Cursor / AI agents** — read this before writing any production code |
 
 ---
 
-## Design System
+## Viewing the Prototype Locally
 
-**"Editorial + Stats" — Direction D (locked)**
+The prototype runs **entirely in the browser** — no build step needed.
 
-- **Fonts:** Fraunces (display/numbers), Inter Tight (UI), JetBrains Mono (labels)
-- **Theme:** Light default (newsprint paper `#F1ECDF`), Dark available
-- **Accent:** Oxblood (`#8A1F1F` light / `#C8413A` dark) — used sparingly
-- **Typography:** All money in Fraunces serif, tabular-nums
-- **Borders:** 1px hairline everywhere, NO rounded cards
-- **Verdict tags:** Bordered rectangles, NOT pills
+```bash
+# Option 1: Open directly in browser (simplest)
+open public/prototype/index.html
 
----
+# Option 2: Serve it locally (avoids any CORS issues)
+cd public/prototype
+npx serve .
+# → http://localhost:3000
+```
 
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| Frontend | React 18 + Babel (prototype-mode, CDN) |
-| Backend | Hono on Cloudflare Workers |
-| Static hosting | Cloudflare Pages |
-| Build | Vite + @hono/vite-build |
-| Dev server | Wrangler Pages Dev + PM2 |
+The prototype is the **visual and interaction source of truth** for all production development.
 
 ---
 
-## Data Architecture
+## Building the Production PWA
 
-- **Data models:** Subscriptions, Accounts, Categories, Card kinds, Receipts
-- **Storage (prototype):** localStorage (`lumen.screen`, `lumen.cancelled`, `lumen.tourDone`, etc.)
-- **Storage (production):** Firestore under `users/{uid}/subscriptions`, `users/{uid}/preferences`
-- **PKR primary** currency, USD secondary, FX ~278
+Read **`AGENTS.md`** — it contains the complete engineering brief including:
+- Exact tech stack (Vite + React 18 + TypeScript + Firebase + CSS Modules)
+- Full project structure to create
+- Firestore schema (collections, fields, security rules)
+- All TypeScript types
+- Gmail sync Cloud Functions architecture
+- 10 merchant parser stubs + Gemini LLM fallback
+- 4-phase build plan
+- Firebase manual setup checklist
+- Key design pitfalls to avoid
+
+### Quick Start for Production Build
+
+```bash
+# 1. Create the new production repo
+npm create vite@latest lumen-app -- --template react-ts
+cd lumen-app
+
+# 2. Install dependencies
+npm install react-router-dom zustand firebase vite-plugin-pwa
+
+# 3. Copy design reference
+cp -r ../lumen-prototype/public/prototype/ ./public/prototype/
+
+# 4. Copy AGENTS.md into the new repo
+cp ../lumen-prototype/AGENTS.md ./AGENTS.md
+
+# 5. Follow Phase 1 in AGENTS.md
+```
 
 ---
 
-## User Guide
+## Design System (locked)
 
-1. Open the app → **Sign In** screen (editorial cover)
-2. Pick **Mobile** or **Desktop** view via the toggle (top of device frame)
-3. **Mobile:** Use the bottom tab bar to navigate (Today / Ledger / Verdicts / Shape / Office)
-4. **Desktop:** Use the left sidebar to navigate between all 8 views
-5. **⌘K** opens the Command Palette for cross-mailbox search
-6. Tap any subscription row → opens Sub Detail with full evidence
-7. Cancel a subscription via the 3-step Cancellation Flow
-8. Connect additional Gmail accounts via Mailroom → "Connect another Gmail"
+| Token | Value |
+|---|---|
+| Background (light) | `#F1ECDF` — newsprint paper |
+| Background (dark) | `#0E1623` — deep ink navy |
+| Accent | `#8A1F1F` light / `#C8413A` dark — oxblood |
+| Display font | `Fraunces` serif (all money, all headlines) |
+| UI font | `Inter Tight` |
+| Mono/label font | `JetBrains Mono` |
+| Border style | 1px hairline — NO rounded corners on content |
+| Verdict tags | Bordered rectangles — NOT pills |
+
+**Do NOT use Tailwind CSS** — it conflicts with ExpressVPN. Use CSS Modules + CSS custom properties.
 
 ---
 
-## Deployment
+## Completion Status
 
-- **Platform:** Cloudflare Pages (via Wrangler)
-- **Status:** ✅ Active (sandbox)
-- **Last Updated:** June 29, 2026
-- **Designed by:** Yasir Bucha
-- **Prototype Vol.:** III
+### ✅ Prototype (100% complete)
+All 10 mobile screens, 8 desktop views, 5 overlays, full design system.
+
+### ⏳ Production PWA (to be built in Cursor)
+| Phase | Features | Status |
+|---|---|---|
+| Phase 1 | PWA scaffold + Firebase Auth + Firestore + Dashboard | ⏳ Pending |
+| Phase 2 | Gmail Cloud Functions + 10 parsers + Gemini fallback | ⏳ Pending |
+| Phase 3 | All screens rebuilt in React/TS + responsive layout | ⏳ Pending |
+| Phase 4 | Offline mode + push notifications + PWA polish | ⏳ Pending |
+
+---
+
+## Tech Stack (production)
+
+- **Frontend:** Vite + React 18 + TypeScript
+- **Styling:** CSS Modules + CSS custom properties (no Tailwind)
+- **Routing:** React Router v6
+- **State:** Zustand
+- **Auth:** Firebase Authentication (Google OAuth)
+- **Database:** Firestore (asia-south1)
+- **Backend:** Firebase Cloud Functions (Node 20)
+- **Gmail:** `googleapis` npm package, `gmail.readonly` scope
+- **AI parsing:** Gemini API (user's own BYOK key)
+- **PWA:** `vite-plugin-pwa` (Workbox)
+- **Hosting:** Firebase Hosting
+
+---
+
+*Lumen · Prototype Vol. III · Designed by Yasir Bucha · June 2026*
