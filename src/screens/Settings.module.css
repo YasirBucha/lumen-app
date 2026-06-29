@@ -1,0 +1,109 @@
+.root {
+  min-height: 100%;
+  overflow-y: auto;
+  position: relative;
+}
+
+.group {
+  padding: 20px 24px 0;
+}
+
+.groupList {
+  margin-top: 8px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-top: 1px solid var(--border);
+}
+
+.rowFirst {
+  border-top: none;
+}
+
+.rowClickable {
+  cursor: pointer;
+}
+
+.icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.body {
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.015em;
+}
+
+.sub {
+  margin-top: 2px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.chev {
+  flex-shrink: 0;
+}
+
+.toggle {
+  width: 36px;
+  height: 20px;
+  border: 1px solid var(--border-hi);
+  position: relative;
+  flex-shrink: 0;
+}
+
+.toggleOn {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.toggleKnob {
+  position: absolute;
+  top: 2px;
+  width: 14px;
+  height: 14px;
+  background: var(--surface-raised);
+}
+
+.toggleKnobOn {
+  right: 2px;
+}
+
+.toggleKnobOff {
+  left: 2px;
+}
+
+.colophon {
+  padding: 36px 24px 24px;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  margin-top: 24px;
+}
+
+.tagline {
+  margin-top: 10px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 12px;
+  letter-spacing: -0.005em;
+}

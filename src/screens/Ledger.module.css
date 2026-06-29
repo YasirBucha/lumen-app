@@ -1,0 +1,37 @@
+.root {
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+.search {
+  padding: 14px 24px 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.searchRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  outline: none;
+  letter-spacing: -0.01em;
+}
+
+.inputEmpty {
+  font-style: italic;
+}
+
+.empty {
+  padding: 20px 0;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  text-align: center;
+  font-size: 14px;
+}

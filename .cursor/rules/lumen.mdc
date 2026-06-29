@@ -8,6 +8,6 @@ Read first: `docs/handoff.md` → `docs/agentic-harness.md` → `AGENTS.md`.
 
 Visual spec: `public/prototype/index.html` (serve on port 8765).
 
-No Tailwind. CSS Modules only. Do not deploy/push without owner approval.
+No Tailwind. CSS Modules only. Yasir prefers autonomous commit/deploy/implement — proceed without waiting for approval unless destructive.
 
 Full harness: [`docs/agentic-harness.md`](../docs/agentic-harness.md)

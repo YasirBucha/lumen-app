@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { useTheme } from '../hooks/useTheme';
 import { LumenLogo, Mono } from '../components/primitives';
@@ -28,7 +29,13 @@ function GoogleG({ size = 20 }: { size?: number }) {
 
 export function SignIn() {
   const theme = useTheme();
+  const navigate = useNavigate();
   const signIn = useAuthStore((s) => s.signIn);
+
+  const handleSignIn = async () => {
+    await signIn();
+    navigate('/scanning');
+  };
 
   return (
     <div className={styles.root} style={{ background: theme.bg, color: theme.text }}>
@@ -70,7 +77,7 @@ export function SignIn() {
         <button
           className={styles.primary}
           style={{ background: theme.accent, color: theme.accentInk }}
-          onClick={() => signIn()}
+          onClick={() => void handleSignIn()}
         >
           <GoogleG size={18} />
           Continue with Gmail

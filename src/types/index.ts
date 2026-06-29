@@ -15,7 +15,7 @@ export type AiTone = 'quiet' | 'confident' | 'conversational';
 
 export interface GmailAccount {
   id: string;
-  label: string;
+  label?: string;
   email: string;
   color: string;
   lastSyncAt?: string;

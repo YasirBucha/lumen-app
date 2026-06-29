@@ -1,8 +1,8 @@
 # Lumen — Agent Handoff
 
 **Updated:** 2026-06-30  
-**Branch:** `main` (local; uncommitted app + harness work)  
-**Phase:** 1 — Shell + Auth + Seed Dashboard (in progress)
+**Branch:** `main` (local; Phase 1/2 work uncommitted)  
+**Phase:** 1 complete · **Phase 2 scaffolded**
 
 ---
 
@@ -14,32 +14,34 @@ Production PWA matching `public/prototype/` pixel-perfectly, on Firebase, Gmail 
 
 ## Done (this session)
 
-- Created Firebase project **`lumen-20260630`** (display name: Lumen).
-- Registered web app **Lumen PWA**; SDK config in local **`.env`** (gitignored).
-- Updated **`.firebaserc`** → `lumen-20260630`.
-- Migrated **`firebase-config.ts`** to Vite env vars (`.env.example` placeholders; matches GTD pattern).
-- **`firebase.ts`**, **`authStore`**, **`useSubscriptions`** guard when Firebase not configured.
-- Firestore database created in **`asia-south1`**; **rules deployed**.
-- **`npm run build`** passes.
-- Dev server verified: SignIn renders at `http://localhost:5173/signin` (matches prototype layout).
+### Phase 1 — mobile shell
+- **AppShell** + **BottomTabBar** (5 tabs: Today, Ledger, Verdicts, Shape, Office)
+- New screens: **Scanning**, **Ledger**, **Verdicts**, **Patterns**, **Settings**
+- Sign-in → `/scanning` → Dashboard flow
+- Routes: `/`, `/ledger`, `/verdicts`, `/patterns`, `/settings`, `/scanning`
+
+### Phase 2 — Cloud Functions scaffold
+- `functions/` with Node 20 + TypeScript
+- **`gmailInitialSync`** (callable, `asia-south1`)
+- **`gmailIncrementalSync`** (scheduled stub, every 6h)
+- Parser layer: netflix, spotify, chatgpt, notion, amazon + **Gemini fallback**
+- `firebase.json` updated with functions predeploy build
+
+### Prior (still valid)
+- Firebase project **`lumen-20260630`**, Auth + Hosting live
+- `.env` local config (gitignored); Firestore rules deployed
+- Commit `ef293b4`: SignIn + Dashboard + Firebase wiring
 
 ---
 
-## Done (prior sessions)
+## Not done / next
 
-- Vite + React 18 + TS migration; CSS tokens, primitives, stores, hooks.
-- Screens: **SignIn**, **Dashboard** (+ cards, trend, category stack).
-- Seed data + Firestore listener with seed fallback.
-- Agent harness docs (`docs/*`).
-
----
-
-## Blockers
-
-- [ ] **Firebase Auth not initialized** — Console → [Authentication](https://console.firebase.google.com/project/lumen-20260630/authentication) → **Get started** → enable **Google** → add **`localhost`** to Authorized domains. (CLI init failed: billing quota exceeded on shared billing account; Spark manual setup required.)
-- [ ] **`firebase deploy --only hosting`** — needs owner approval (build ready in `dist/`).
-- [ ] Git push — uncommitted app + harness; needs approval.
-- [ ] Phases 2–4 per `AGENTS.md`.
+- [ ] Deploy functions (`firebase deploy --only functions`) — needs **Blaze/billing** + `GMAIL_CLIENT_ID` / `GMAIL_CLIENT_SECRET` env
+- [ ] **ConnectGmailFlow** overlay + real OAuth token storage
+- [ ] Wire Scanning screen to real `gmailInitialSync` progress
+- [ ] Remaining parsers (disney, daraz, dropbox, adobe, icloud)
+- [ ] Sub Detail, Alerts, Calendar, desktop views, overlays (Phase 3)
+- [ ] Git push — needs approval
 
 ---
 
@@ -48,49 +50,18 @@ Production PWA matching `public/prototype/` pixel-perfectly, on Firebase, Gmail 
 | Field | Value |
 |-------|-------|
 | Project ID | `lumen-20260630` |
-| Console | https://console.firebase.google.com/project/lumen-20260630/overview |
-| Firestore region | `asia-south1` |
-| Hosting | not deployed yet |
-| Auth | **not enabled** (owner console step above) |
-
-Local credentials: copy `.env.example` → `.env` (values already written locally; not in git).
+| Hosting | https://lumen-20260630.web.app |
+| Functions region | `asia-south1` |
+| Auth | Google enabled |
 
 ---
 
-## Files agents should not touch without reason
-
-- `public/prototype/*` (reference only)
-- `.env` (secrets)
-- `lumen-handoff.tar.gz`
-
----
-
-## Exact next step
-
-1. **Owner:** Enable Google Auth in Firebase Console (link above).
-2. Verify sign-in end-to-end on `http://localhost:5173/signin`.
-3. With approval: `npm run build && firebase deploy --only hosting`.
-4. Continue Phase 1 checklist in `AGENTS.md`, then Phase 2 (`firebase init functions`).
-
----
-
-## Tests already run
+## Tests run
 
 ```bash
-npm run build                              # pass (2026-06-30)
-firebase deploy --only firestore:rules     # pass → lumen-20260630
-# SignIn page load + visual check on :5173  # pass
-# Google sign-in popup                      # blocked — Auth not initialized
+npm run build                    # pass
+cd functions && npm run build    # pass
 ```
-
----
-
-## Owner approvals still needed
-
-- Enable Firebase Auth (console — 2 min)
-- Firebase Hosting deploy
-- Git push (app code + harness currently uncommitted together)
-- Gmail OAuth client secrets for Cloud Functions (Phase 2)
 
 ---
 
@@ -99,10 +70,10 @@ firebase deploy --only firestore:rules     # pass → lumen-20260630
 ```
 Continue Lumen PWA at /Users/yb/Dev/projects/Lumen.
 
-Read first: docs/handoff.md → docs/agentic-harness.md → AGENTS.md.
+Read: docs/handoff.md → docs/agentic-harness.md → AGENTS.md.
 
-Phase 1: Firebase project lumen-20260630 wired (.env + .firebaserc). Firestore rules deployed. Build passes.
-Blocker: enable Google Auth in Firebase Console, then verify sign-in. Deploy hosting with approval.
+Phase 1 mobile tabs done (Dashboard, Ledger, Verdicts, Patterns, Settings, Scanning).
+Phase 2 functions scaffolded — wire ConnectGmailFlow + deploy functions with Gmail OAuth secrets.
 
-Rules: CSS Modules only (no Tailwind). Match public/prototype/ exactly. Do not deploy/push without approval.
+Rules: CSS Modules only. Match public/prototype/. No deploy/push without approval.
 ```
