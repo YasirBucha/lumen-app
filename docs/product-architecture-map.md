@@ -21,20 +21,20 @@
 
 | Module | Path | Role |
 |--------|------|------|
-| Entry | `main.tsx`, `App.tsx` | Router, auth gate, theme init, ConnectGmailFlow mount |
-| Screens | `screens/` | SignIn, Scanning, Dashboard, Ledger, Verdicts, Patterns, Settings |
-| Layout | `components/layout/` | AppShell, BottomTabBar (mobile tabs) |
-| Overlays | `components/overlays/` | ConnectGmailFlow (Gmail OAuth + scan trigger) |
+| Entry | `main.tsx`, `App.tsx` | Router, auth gate, theme, overlays mount |
+| Screens | `screens/` | SignIn, Scanning, Dashboard, Ledger, Verdicts, Patterns, Alerts, Calendar, Mailroom, Settings |
+| Layout | `components/layout/` | AppShell (mobile/desktop switch), BottomTabBar, DesktopShell, DesktopSidebar, DeskSubPanel |
+| Overlays | `components/overlays/` | ConnectGmailFlow, CommandPalette, CancellationFlow, OnboardingTour |
+| Sub detail | `components/subdetail/` | SubDetail, SubDetailOverlay, PriceHistorySparkline, SharedWith, VerdictHistory |
 | Primitives | `components/primitives/` | Editorial UI atoms (Masthead, StatHero, VerdictTag, …) |
 | Dashboard widgets | `components/dashboard/` | Trend, categories, price alerts, empty state |
-| State | `store/` | Zustand: auth, subscriptions, UI (incl. palette open stub) |
-| Hooks | `hooks/` | Firestore subs, Gmail accounts, theme, ⌘K (`useKeyboard`) |
-| Lib | `lib/` | Firebase, format, seedData, gmailConnect |
+| State | `store/` | Zustand: auth, subscriptions, UI (palette, connect, cancel, tour) |
+| Hooks | `hooks/` | Firestore subs, Gmail accounts, theme, ⌘K, useMediaQuery |
+| Lib | `lib/` | Firebase, format, seedData, gmailConnect, alerts, calendar, commandPaletteSearch |
 | Types | `types/index.ts` | Subscription, Verdict, preferences |
 | Styles | `styles/` | tokens.css, globals, typography |
 | Backend | `functions/src/` | gmailInitialSync, parsers, Gemini fallback |
-
-**Not yet in repo:** `desktop/`, CommandPalette, CancellationFlow, OnboardingTour, SubDetail, Alerts, Calendar, Mailroom.
+| PWA | `public/manifest.json`, `vite.config.ts` | vite-plugin-pwa, Workbox precache |
 
 ---
 

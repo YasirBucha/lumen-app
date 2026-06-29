@@ -1,4 +1,6 @@
-import { FX, ACCOUNTS } from '../../lib/seedData';
+import { FX } from '../../lib/seedData';
+import { buildMailboxOptions } from '../../lib/mailboxAccounts';
+import { useSubStore } from '../../store/subStore';
 import { fmtDateShort } from '../../lib/format';
 import type { Subscription, ThemeTokens } from '../../types';
 import { Masthead, Mono } from '../primitives';
@@ -138,8 +140,11 @@ interface EmptyDashboardProps {
 }
 
 export function EmptyDashboard({ theme, activeAccount, onConnect, onSwitch }: EmptyDashboardProps) {
-  const acc = ACCOUNTS.find((a) => a.id === activeAccount) ?? ACCOUNTS[0];
+  const gmailAccounts = useSubStore((s) => s.gmailAccounts);
+  const options = buildMailboxOptions(gmailAccounts);
+  const acc = options.find((a) => a.id === activeAccount) ?? options[0] ?? { id: 'all', label: 'All Mail', email: '' };
   const isSpecificAccount = activeAccount !== 'all';
+  const hasConnectedMailbox = gmailAccounts.length > 0;
 
   return (
     <div className={styles.empty} style={{ background: theme.bg, color: theme.text }}>
@@ -166,6 +171,11 @@ export function EmptyDashboard({ theme, activeAccount, onConnect, onSwitch }: Em
             <>
               No subscriptions found in <em>{acc.email || acc.label}</em>. Either this mailbox is genuinely clean, or
               it needs a fresh scan.
+            </>
+          ) : hasConnectedMailbox ? (
+            <>
+              Gmail is connected but no subscriptions synced yet. Open Mailroom and tap Connect Gmail to run a fresh
+              scan.
             </>
           ) : (
             <>
@@ -199,7 +209,7 @@ export function EmptyDashboard({ theme, activeAccount, onConnect, onSwitch }: Em
           style={{ background: theme.accent, color: '#fff' }}
           onClick={onConnect}
         >
-          {isSpecificAccount ? 'Re-scan this mailbox' : 'Connect a Gmail'}
+          {isSpecificAccount ? 'Re-scan this mailbox' : hasConnectedMailbox ? 'Sync Gmail now' : 'Connect a Gmail'}
           <svg width="11" height="11" viewBox="0 0 12 12">
             <path
               d="M2 6h8M7 3l3 3-3 3"

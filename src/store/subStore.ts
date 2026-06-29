@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import type { GmailAccount, Subscription } from '../types';
-import { SUBS_HEAVY } from '../lib/seedData';
 
 interface SubState {
   subscriptions: Subscription[];
@@ -13,10 +12,11 @@ interface SubState {
   setActiveAccount: (id: string) => void;
   setOpenSubId: (id: string | null) => void;
   addCancelledId: (id: string) => void;
+  markCancelled: (id: string) => void;
 }
 
 export const useSubStore = create<SubState>((set) => ({
-  subscriptions: SUBS_HEAVY,
+  subscriptions: [],
   gmailAccounts: [],
   activeAccount: 'all',
   openSubId: null,
@@ -28,5 +28,12 @@ export const useSubStore = create<SubState>((set) => ({
   addCancelledId: (id) =>
     set((s) => ({
       cancelledIds: s.cancelledIds.includes(id) ? s.cancelledIds : [...s.cancelledIds, id],
+    })),
+  markCancelled: (id) =>
+    set((s) => ({
+      cancelledIds: s.cancelledIds.includes(id) ? s.cancelledIds : [...s.cancelledIds, id],
+      subscriptions: s.subscriptions.map((sub) =>
+        sub.id === id ? { ...sub, status: 'past', verdict: 'cancel' } : sub,
+      ),
     })),
 }));

@@ -1,0 +1,329 @@
+.root {
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+.kpiStrip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.kpiCell {
+  padding: 14px 16px;
+}
+
+.kpiCellBorder {
+  border-right: 1px solid var(--border);
+}
+
+.stripHeader {
+  padding: 18px 24px 0;
+}
+
+.stripHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+
+.weekStrip {
+  display: flex;
+  overflow-x: auto;
+  gap: 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.weekCell {
+  flex: 0 0 56px;
+  min-height: 96px;
+  padding: 10px 6px 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.weekCellBorder {
+  border-right: 1px solid var(--border);
+}
+
+.dayNum {
+  font-family: var(--font-display);
+  font-size: 18px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.todayBar {
+  width: 14px;
+  height: 1.5px;
+  margin-top: -2px;
+}
+
+.stamps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+  width: 100%;
+}
+
+.stampBar {
+  display: block;
+  height: 4px;
+  width: 100%;
+  opacity: 0.95;
+}
+
+.cellTotal {
+  margin-top: auto;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  padding-top: 2px;
+}
+
+.dayDetail {
+  border-top: 1px solid var(--border);
+  padding: 18px 24px 8px;
+}
+
+.dayDetailHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.dayTitle {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.emptyDay {
+  margin-top: 14px;
+  padding: 14px 0;
+  border-top: 1px dashed var(--border);
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-style: italic;
+}
+
+.combined {
+  margin-top: 6px;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-style: italic;
+}
+
+.renewalList {
+  margin-top: 12px;
+}
+
+.renewalRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+}
+
+.renewalRowFirst {
+  border-top: 1px solid var(--border);
+}
+
+.stampSwatch {
+  width: 6px;
+  height: 36px;
+  flex-shrink: 0;
+}
+
+.renewalBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.renewalName {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.renewalAmount {
+  text-align: right;
+}
+
+.monthHeader {
+  padding: 20px 24px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.monthTitle {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.025em;
+}
+
+.monthNav {
+  display: flex;
+  gap: 0;
+}
+
+.navBtn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navBtnRight {
+  border-left: none;
+}
+
+.dowHeader {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.dowCell {
+  padding: 8px 4px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  font-weight: 500;
+}
+
+.monthGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.gridCell {
+  min-height: 64px;
+  padding: 5px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 3px;
+  position: relative;
+  text-align: left;
+}
+
+.gridCellOut {
+  opacity: 0.34;
+  cursor: default;
+}
+
+.gridDateRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gridDate {
+  font-family: var(--font-display);
+  font-size: 13px;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.todayDot {
+  width: 4px;
+  height: 4px;
+}
+
+.gridStamps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2px;
+}
+
+.gridStamp {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  padding-left: 4px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.legend {
+  padding: 18px 24px 24px;
+}
+
+.legendItems {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legendSwatch {
+  width: 10px;
+  height: 2px;
+}
+
+.legendQuote {
+  margin-top: 16px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.legendBy {
+  margin-top: 4px;
+}

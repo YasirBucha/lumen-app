@@ -1,0 +1,462 @@
+{
+  "/Users/yb/Dev/projects/Lumen/vite.config.ts": {
+    "mtime": 1782771210.1370587,
+    "hash": "7e28f434bb09c11be2b8eb921e9f3c95"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/onboarding-tour.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "dff2da0f4e5c78465a375944264b5bd5"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/screen-desktop-aux.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "84a0a0dd21815113899032d6ca9376e7"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/connect-gmail-flow.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "4e2da00655e4a682dbbed1c96997fb48"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/alerts-inbox.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "f9a12dfdee0016e0421626e95cb3aab2"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/data.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "79ef9f8138e3ea99c624a509e220a3fa"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/ios_frame.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "cfb8be183152a0cb0a575e6598192153"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/screen-desktop.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "080e873d04d7c035faa14225de35cb3f"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/screens-mobile-main.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "e72ee65f7e4c2294ceabac4ea4cce9c7"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/screens-mobile-aux.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "ca239b7d35272a9058c76735c4c4ee89"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/renewal-calendar.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "1b028b219e4a35ff73b5bfe573807986"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/app.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "450fe3a8c78755c68a1cd45b3742872a"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/tweaks_panel.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "73e0b5ee57866ef74b33bd304e0edd5c"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/sub-detail-extras.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "5cb7250de4f8336663f6e95f64684722"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/dashboard-cards.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "fae093c8e9cb7836783b7e8df4afaa0f"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/command-palette.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "8630c6611d731fc23dbcfd454e0b3d39"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/screens-mobile.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "ae5b9228348a22847480d5f7187a8ff9"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/primitives.jsx": {
+    "mtime": 1782765501.0,
+    "hash": "ebce22a865c3199e33723fcca9ea804d"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/geminiParser.js": {
+    "mtime": 1782775386.2518942,
+    "hash": "99416c400a44d9e7e04eb5a9916e4127"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/gmailSync.js": {
+    "mtime": 1782775386.2657442,
+    "hash": "ae4061bc079ac9abf22f760ff839e99a"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/index.js": {
+    "mtime": 1782775386.267676,
+    "hash": "bd18dd143893a84fb4fa0c0510d2ec3e"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/types.js": {
+    "mtime": 1782775386.2455704,
+    "hash": "9e3fa9db5d4c134349185b8ac35ac371"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/index.js": {
+    "mtime": 1782775386.2575092,
+    "hash": "6e2fd87e9858feddf2638fd3f8620d3f"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/geminiParser.ts": {
+    "mtime": 1782769618.2653708,
+    "hash": "6a4a15655ebef2ff1f23d35548b51800"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/index.ts": {
+    "mtime": 1782774097.6176338,
+    "hash": "18bca9651eaeb3fa2296b6a67586c168"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/gmailSync.ts": {
+    "mtime": 1782775379.4727824,
+    "hash": "c9513a5127c31b73791eac21ea8c1ee0"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/types.ts": {
+    "mtime": 1782769613.8406432,
+    "hash": "f12a93f0c2bb2a88383c7d15ad486224"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/index.ts": {
+    "mtime": 1782769960.3827055,
+    "hash": "799fee1d332726ce6ffdf94cfc6eefc7"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/App.tsx": {
+    "mtime": 1782771187.1067126,
+    "hash": "ef5958772b822dc3dfd700e2d71632c7"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/main.tsx": {
+    "mtime": 1782771210.3951569,
+    "hash": "513324e43c71ef90b466b28167c5c465"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/vite-env.d.ts": {
+    "mtime": 1782771213.3331437,
+    "hash": "0cad6914a1a0abdd119cc87f91a3d30c"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/types/index.ts": {
+    "mtime": 1782769953.13602,
+    "hash": "05011542b7ea8e00b7e0f4e58b13b3eb"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Settings.tsx": {
+    "mtime": 1782769657.3386402,
+    "hash": "bb30339fd11a16a153ae4200eadc611e"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Dashboard.tsx": {
+    "mtime": 1782773561.7150395,
+    "hash": "4bede50c7703ace001d0aacbcbe0d44b"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Mailroom.tsx": {
+    "mtime": 1782774515.6974995,
+    "hash": "ae42eb428d49f0a77bcc89f95dc02090"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Alerts.tsx": {
+    "mtime": 1782771163.6510398,
+    "hash": "c336948cd6adfb322f013c4194519188"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Verdicts.tsx": {
+    "mtime": 1782769593.0924473,
+    "hash": "b14961685a92cd5ebf48532919c5c87c"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Calendar.tsx": {
+    "mtime": 1782771165.12554,
+    "hash": "c15ac38f0247298582bd64e7bddce348"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Patterns.tsx": {
+    "mtime": 1782769651.2171009,
+    "hash": "552ef8ac9bdf9d16fb0ef5051d29259b"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Scanning.tsx": {
+    "mtime": 1782773539.9792435,
+    "hash": "35f68958ec84d2d4e58215db53dd76ab"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/Ledger.tsx": {
+    "mtime": 1782769652.0650365,
+    "hash": "bc951dce0be45dbc4862fba1fed363cd"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/screens/SignIn.tsx": {
+    "mtime": 1782773540.2492046,
+    "hash": "2c220157b6ecbbfc4184a655ab7e8618"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/overlays/OnboardingTour.tsx": {
+    "mtime": 1782771156.6229556,
+    "hash": "848344d50eae8c842a53962b67586c78"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/overlays/CommandPalette.tsx": {
+    "mtime": 1782771198.0778565,
+    "hash": "1e88ac9980d381bf369ed6d14e5b744e"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/overlays/ConnectGmailFlow.tsx": {
+    "mtime": 1782775298.2547245,
+    "hash": "8a6d996223f87cbd7210637fc7bddb19"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/overlays/CancellationFlow.tsx": {
+    "mtime": 1782771148.1825247,
+    "hash": "ebf2b22c60fee520822d530feb5b2101"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/overlays/onboardingTourData.ts": {
+    "mtime": 1782771153.7938082,
+    "hash": "b25a5a2b52c068534cc727d9fa4c90c3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/layout/DeskSubPanel.tsx": {
+    "mtime": 1782771186.8762116,
+    "hash": "b3c3db5b715340448193e5099bf3e5ca"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/layout/DesktopSidebar.tsx": {
+    "mtime": 1782773562.2831552,
+    "hash": "13648f681e90fe69206091317389b4a3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/layout/DesktopShell.tsx": {
+    "mtime": 1782771143.816366,
+    "hash": "b96a7b6c1977f49e2dbfba0a92c362fb"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/layout/NavIcon.tsx": {
+    "mtime": 1782771152.2320716,
+    "hash": "fddfc96bde5228c3566b2d357cb57eb3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/layout/AppShell.tsx": {
+    "mtime": 1782771152.6437762,
+    "hash": "5e2741fbd9e9de44057a702ffbf47cf3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/layout/BottomTabBar.tsx": {
+    "mtime": 1782769564.8306525,
+    "hash": "23b56f4ea82901c28f73f3195bd017c8"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/PullQuote.tsx": {
+    "mtime": 1782766961.5752707,
+    "hash": "c0233dc8a5353d3260f3406620d1302f"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/StatHero.tsx": {
+    "mtime": 1782766951.5583355,
+    "hash": "20c0c8687b9b01f70816cede7c3b9dbd"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/MerchantGlyph.tsx": {
+    "mtime": 1782766966.5246742,
+    "hash": "e1f992f01f0383cb58c31257e567caf6"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/Sparkline.tsx": {
+    "mtime": 1782766968.9162574,
+    "hash": "db2a9d183a903660dc46649b620b8c44"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/EditorialRow.tsx": {
+    "mtime": 1782766958.9728632,
+    "hash": "6950130653649cca84d92835082d7781"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/SectionHeader.tsx": {
+    "mtime": 1782766969.6231127,
+    "hash": "8a3620707867d9e6502dc0126b440060"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/TabRow.tsx": {
+    "mtime": 1782766964.26545,
+    "hash": "6a5d9cb8b02b42640b88d3d2102c5691"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/Masthead.tsx": {
+    "mtime": 1782766945.254267,
+    "hash": "ebf913a0cc007add1f4a992d7c9f8136"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/Mono.tsx": {
+    "mtime": 1782766941.5009162,
+    "hash": "94635ef08b78d5f430d7c094b7b74d8f"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/BigNumber.tsx": {
+    "mtime": 1782766943.8264709,
+    "hash": "39f44bfde0325f3c063c1ee7b4b4e19f"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/ScreenHead.tsx": {
+    "mtime": 1782766949.1979566,
+    "hash": "2ed4741c9fe9ad23ecd01a36b81da749"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/index.ts": {
+    "mtime": 1782766970.373011,
+    "hash": "3161a941cb2aa8b4ff3bedefe75687ed"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/LumenLogo.tsx": {
+    "mtime": 1782766942.4499714,
+    "hash": "8cc87921f5212bc8f6c19b98cb6e8b96"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/primitives/StatStrip.tsx": {
+    "mtime": 1782766953.9778068,
+    "hash": "474d9a1539537771c735dd9c2645aa39"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/dashboard/AccountAvatar.tsx": {
+    "mtime": 1782773549.3400905,
+    "hash": "cf4cf459bb42c58af623df8b3aa91775"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/dashboard/TrendChart.tsx": {
+    "mtime": 1782766979.9722435,
+    "hash": "d0c4a9eb6ffd789b5a5fe8ddea707cea"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/dashboard/DashboardCards.tsx": {
+    "mtime": 1782774528.965901,
+    "hash": "fe747124a76d684973669d0588c4064c"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/dashboard/CategoryStack.tsx": {
+    "mtime": 1782766985.3091288,
+    "hash": "2028130e1b22b646ca2e3ecd0308f3ce"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/subdetail/SubDetail.tsx": {
+    "mtime": 1782771182.7369545,
+    "hash": "151b359b696dcf97c7b35867819deaba"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/subdetail/VerdictHistory.tsx": {
+    "mtime": 1782771140.0784793,
+    "hash": "7aedf26929f07d0eabfa037e49daf39c"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/subdetail/SubDetailOverlay.tsx": {
+    "mtime": 1782771192.8580096,
+    "hash": "4f556256d27a9517f92846647936633a"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/subdetail/SharedWith.tsx": {
+    "mtime": 1782771132.85729,
+    "hash": "955f1e911cb4fa42ed9745448f1dad62"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/components/subdetail/PriceHistorySparkline.tsx": {
+    "mtime": 1782771128.8600411,
+    "hash": "534f9d168d35833360637ed465a773a2"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/hooks/useSubscriptions.ts": {
+    "mtime": 1782774497.8685017,
+    "hash": "d3978bbf73c101e6c45395676eb9f822"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/hooks/useMediaQuery.ts": {
+    "mtime": 1782771123.2545214,
+    "hash": "2c2b10370aa4d1167d39e1faa09c4d5a"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/hooks/useKeyboard.ts": {
+    "mtime": 1782771020.9940333,
+    "hash": "7e2e48f9da22878b0d328c747af2e6ec"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/hooks/useTheme.ts": {
+    "mtime": 1782766938.4618454,
+    "hash": "ad52c81003e7fb5d3abfdcabd28a5f60"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/hooks/useGmailAccounts.ts": {
+    "mtime": 1782769986.7733715,
+    "hash": "fbbcc4bf42aa24c318032be4edbe0f43"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/clearUserSubscriptions.ts": {
+    "mtime": 1782774490.8508523,
+    "hash": "659f915d61cc2fbbf8d4b9c507dbffc7"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/gmailConnect.ts": {
+    "mtime": 1782775372.104905,
+    "hash": "d8e8ab054d1a5e04a4b88ec3326470a8"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/firebase.ts": {
+    "mtime": 1782767751.3055923,
+    "hash": "82eebbe3388dd693b3e58d8dacc8c298"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/mailboxAccounts.ts": {
+    "mtime": 1782773508.543107,
+    "hash": "3409fb3e3c02437b00b25b5c8c0f99e3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/verdictHistory.ts": {
+    "mtime": 1782771120.937053,
+    "hash": "883485863e92a2945a2c38b9cea98cb3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/firebase-config.ts": {
+    "mtime": 1782767750.6009731,
+    "hash": "0e4126d55bb55afb3339860d80bb8c21"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/calendar.ts": {
+    "mtime": 1782771124.857412,
+    "hash": "044946435e3fcd1d0dc04c10c0a8bbc4"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/normalizeSubscription.ts": {
+    "mtime": 1782773510.9738932,
+    "hash": "a802c459381d6cd38ad0d3996724abac"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/format.ts": {
+    "mtime": 1782766927.877516,
+    "hash": "b80e7c1cc1aad3eb82d4654a578273ba"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/commandPaletteSearch.ts": {
+    "mtime": 1782770995.7036936,
+    "hash": "1a51846a2c71c62b12ed6f21cdc111e1"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/verdictCopy.ts": {
+    "mtime": 1782771118.50405,
+    "hash": "f59be86d8b32ac384287f1e9775026b8"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/priceSeries.ts": {
+    "mtime": 1782771122.0103502,
+    "hash": "783804413fa0f9a4a96c4c3756e715f8"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/seedData.ts": {
+    "mtime": 1782767031.4126973,
+    "hash": "848ee2746d5a1cb4dc51a529616fdf22"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/alerts.ts": {
+    "mtime": 1782771122.4485097,
+    "hash": "f91c131ce684481f4fde320ef4959355"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/store/authStore.ts": {
+    "mtime": 1782767756.7239015,
+    "hash": "2e13d80a5d4e993d9359a1737b6530db"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/store/subStore.ts": {
+    "mtime": 1782773519.2477825,
+    "hash": "eb53142acf066f28d86b31a6cb066be3"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/store/uiStore.ts": {
+    "mtime": 1782771176.346646,
+    "hash": "c30f79ffacf7c4cbead7f7a8c208d95a"
+  },
+  "/Users/yb/Dev/projects/Lumen/index.html": {
+    "mtime": 1782771210.7693427,
+    "hash": "276f0372c868da481b18db54cd8f80e4"
+  },
+  "/Users/yb/Dev/projects/Lumen/CURSOR.md": {
+    "mtime": 1782767466.7895653,
+    "hash": "262c8db20f72cd8f9ce7277c26153382"
+  },
+  "/Users/yb/Dev/projects/Lumen/README.md": {
+    "mtime": 1782770347.961933,
+    "hash": "cdc06812c59a9803b36a81007be969ed"
+  },
+  "/Users/yb/Dev/projects/Lumen/CODEX.md": {
+    "mtime": 1782767467.1412802,
+    "hash": "9893ea7f4342c74fda110c808137bf3f"
+  },
+  "/Users/yb/Dev/projects/Lumen/GLOBAL_AGENTS.md": {
+    "mtime": 1782771116.3097486,
+    "hash": "e662606bc52048d0e7516732053a8c92"
+  },
+  "/Users/yb/Dev/projects/Lumen/GEMINI.md": {
+    "mtime": 1782767467.3932784,
+    "hash": "bf7ae5230e6da68440fcacda966d544c"
+  },
+  "/Users/yb/Dev/projects/Lumen/AGENTS.md": {
+    "mtime": 1782775369.5861206,
+    "hash": "72189ad20f1046a23c08a156d6f6f903"
+  },
+  "/Users/yb/Dev/projects/Lumen/CLAUDE.md": {
+    "mtime": 1782767467.7555318,
+    "hash": "e7dd0eaddf62c32ca165e96d3dff5395"
+  },
+  "/Users/yb/Dev/projects/Lumen/docs/testing-plan.md": {
+    "mtime": 1782770342.2410421,
+    "hash": "5fe0909c675ecb180b77931912fbbf07"
+  },
+  "/Users/yb/Dev/projects/Lumen/docs/product-architecture-map.md": {
+    "mtime": 1782771250.6747777,
+    "hash": "9b46cd8a6d8a15884eef1fe424f851bc"
+  },
+  "/Users/yb/Dev/projects/Lumen/docs/agentic-harness.md": {
+    "mtime": 1782770329.412349,
+    "hash": "393f95a01b1bac345b05e8e7f3f6ae75"
+  },
+  "/Users/yb/Dev/projects/Lumen/docs/handoff.md": {
+    "mtime": 1782772500.588354,
+    "hash": "65dbee9a1b36ae7c46bb23c9f2602177"
+  },
+  "/Users/yb/Dev/projects/Lumen/docs/setup-yasir.md": {
+    "mtime": 1782772507.096311,
+    "hash": "e6eb72d45e6277ae06e3bd9ed85ba551"
+  },
+  "/Users/yb/Dev/projects/Lumen/docs/runtime-harness-opportunities.md": {
+    "mtime": 1782770343.3233442,
+    "hash": "3156bd25eb0afec4cfda409bb597b50d"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/prototype/index.html": {
+    "mtime": 1782766162.0,
+    "hash": "2bbff4534a2f3a4ad3e09ce37812d079"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/icons/icon-192.svg": {
+    "mtime": 1782771208.8410728,
+    "hash": "a1377c81ad45e602bc119752bf8d37fd"
+  },
+  "/Users/yb/Dev/projects/Lumen/public/icons/icon-512.svg": {
+    "mtime": 1782771209.267702,
+    "hash": "2d40fa75a444025027d4f181ca48a1a1"
+  }
+}

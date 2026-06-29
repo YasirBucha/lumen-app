@@ -1,0 +1,141 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.overlayDesktop {
+  padding: 60px;
+}
+
+.card {
+  width: calc(100% - 40px);
+  max-width: 360px;
+  border: 1px solid;
+  padding: 24px 22px 18px;
+  position: relative;
+  font-family: 'Inter Tight', sans-serif;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+}
+
+.cardDesktop {
+  width: 480px;
+  max-width: 480px;
+  padding: 30px 34px 24px;
+}
+
+.kickerRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid;
+}
+
+.title {
+  margin-top: 18px;
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.titleDesktop {
+  font-size: 38px;
+}
+
+.titleItalic {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.body {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.5;
+  letter-spacing: -0.003em;
+}
+
+.cardDesktop .body {
+  font-size: 15px;
+}
+
+.foot {
+  margin-top: 14px;
+}
+
+.dots {
+  margin-top: 20px;
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+
+.dot {
+  height: 2px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: width 0.18s;
+}
+
+.actions {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.skipBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.actionBtns {
+  display: flex;
+  gap: 8px;
+}
+
+.backBtn {
+  background: transparent;
+  border: 1px solid;
+  cursor: pointer;
+  padding: 8px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.nextBtn {
+  border: 1px solid;
+  cursor: pointer;
+  padding: 8px 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}

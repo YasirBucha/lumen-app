@@ -1,0 +1,104 @@
+.root {
+  min-height: 100%;
+  overflow-y: auto;
+}
+
+.accountRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 0;
+}
+
+.accountRowBorder {
+  border-top: 1px solid var(--border);
+}
+
+.label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.email {
+  display: block;
+  margin-top: 4px;
+}
+
+.stats {
+  margin-top: 4px;
+}
+
+.syncCol {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.syncBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  padding: 3px 6px;
+}
+
+.syncDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.connectWrap {
+  padding: 8px 24px 0;
+}
+
+.connectBtn {
+  width: 100%;
+  padding: 16px 14px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+}
+
+.connectIcon {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.connectTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  letter-spacing: -0.015em;
+}
+
+.connectSub {
+  display: block;
+  margin-top: 4px;
+}
+
+.hint {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13.5px;
+  line-height: 1.5;
+  letter-spacing: -0.005em;
+}
+
+.hintStrong {
+  font-style: normal;
+}

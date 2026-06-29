@@ -1,0 +1,296 @@
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  overflow-y: auto;
+  padding-bottom: 110px;
+}
+
+.rootCompact {
+  position: relative;
+  inset: unset;
+  z-index: unset;
+  min-height: 100%;
+  padding-bottom: 48px;
+}
+
+.header {
+  padding: 56px 24px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.iconBtn {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.masthead {
+  padding: 14px 24px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mastheadCancelled {
+  opacity: 0.85;
+}
+
+.mastheadRow {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mastheadInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.merchantName {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.merchantMeta {
+  margin-top: 6px;
+}
+
+.cancelledRow {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  border: 1.5px solid var(--accent);
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  transform: rotate(-2deg);
+  position: relative;
+}
+
+.stampDot {
+  width: 5px;
+  height: 5px;
+  background: var(--accent);
+  transform: rotate(45deg);
+  display: inline-block;
+}
+
+.cancelledPrice {
+  padding: 22px 24px 24px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.cancelledTick {
+  position: absolute;
+  top: 26px;
+  left: 24px;
+  width: 18px;
+  height: 1.5px;
+}
+
+.cancelledLabel {
+  padding-left: 26px;
+}
+
+.cancelledAmount {
+  margin-top: 10px;
+  position: relative;
+  display: inline-block;
+}
+
+.strike {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 52%;
+  height: 1.5px;
+  transform: rotate(-3deg);
+}
+
+.reclaimed {
+  margin-top: 12px;
+}
+
+.evidenceRow {
+  display: flex;
+  gap: 12px;
+  padding: 10px 0;
+}
+
+.evidenceRowBorder {
+  border-top: 1px solid var(--border);
+}
+
+.evidenceNum {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  min-width: 24px;
+  padding-top: 2px;
+}
+
+.evidenceText {
+  font-family: var(--font-display);
+  font-size: 14.5px;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}
+
+.tagRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+
+.tagRowBorder {
+  border-top: 1px solid var(--border);
+}
+
+.tagValue {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tagCategory {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.categoryLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.tagGmail {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.gmailLabel {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.historyRow {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.historyRowBorder {
+  border-top: 1px solid var(--border);
+}
+
+.historyDot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+}
+
+.historyDate {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14px;
+  letter-spacing: -0.01em;
+}
+
+.historyAmount {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.015em;
+}
+
+.actions {
+  padding: 20px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.btnPrimary {
+  height: 50px;
+  border: 1px solid var(--border-hi);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.btnPrimaryAccent {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.btnSecondary {
+  height: 40px;
+  border: none;
+  background: transparent;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.filed {
+  height: 50px;
+  border: 1px solid var(--border);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}

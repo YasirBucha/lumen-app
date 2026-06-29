@@ -1,0 +1,51 @@
+.root {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.range {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.from {
+  text-decoration: line-through;
+}
+
+.arrow {
+  /* color via inline */
+}
+
+.to {
+  /* color via inline */
+}
+
+.pct {
+  padding-left: 4px;
+}
+
+.chart {
+  display: block;
+  overflow: visible;
+}
+
+.quote {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}

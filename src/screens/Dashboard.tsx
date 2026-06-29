@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { ACCOUNTS, buildTrend, CARD_KINDS } from '../lib/seedData';
+import { useNavigate } from 'react-router-dom';
+import { buildTrend, CARD_KINDS } from '../lib/seedData';
+import { buildMailboxOptions } from '../lib/mailboxAccounts';
 import {
   daysUntil,
   fmt,
@@ -11,6 +13,7 @@ import {
 } from '../lib/format';
 import { useTheme } from '../hooks/useTheme';
 import { useSubStore } from '../store/subStore';
+import { OnboardingTour } from '../components/overlays/OnboardingTour';
 import { useUiStore } from '../store/uiStore';
 import type { Subscription } from '../types';
 import {
@@ -29,13 +32,19 @@ import { TrendChart } from '../components/dashboard/TrendChart';
 import styles from './Dashboard.module.css';
 
 export function Dashboard() {
+  const navigate = useNavigate();
   const theme = useTheme();
   const currency = useUiStore((s) => s.currency);
+  const tourDone = useUiStore((s) => s.tourDone);
   const setConnectOpen = useUiStore((s) => s.setConnectOpen);
+  const setPaletteOpen = useUiStore((s) => s.setPaletteOpen);
   const subs = useSubStore((s) => s.subscriptions);
   const activeAccount = useSubStore((s) => s.activeAccount);
   const setActiveAccount = useSubStore((s) => s.setActiveAccount);
   const setOpenSubId = useSubStore((s) => s.setOpenSubId);
+
+  const gmailAccounts = useSubStore((s) => s.gmailAccounts);
+  const accountOptions = buildMailboxOptions(gmailAccounts);
 
   const activeSubs = subs.filter(
     (s) => s.status === 'active' && (activeAccount === 'all' || s.account === activeAccount),
@@ -48,7 +57,8 @@ export function Dashboard() {
         activeAccount={activeAccount}
         onConnect={() => setConnectOpen(true)}
         onSwitch={() => {
-          const ids = ACCOUNTS.map((a) => a.id);
+          if (accountOptions.length < 2) return;
+          const ids = accountOptions.map((a) => a.id);
           const idx = ids.indexOf(activeAccount);
           setActiveAccount(ids[(idx + 1) % ids.length]);
         }}
@@ -70,16 +80,18 @@ export function Dashboard() {
   const cancelSubs = activeSubs.filter((s) => s.verdict === 'cancel');
   const featured = cancelSubs[0] || reviewSubs[0];
   const [ccy, num] = splitMoney(currency, monthly);
-  const acc = ACCOUNTS.find((a) => a.id === activeAccount) ?? ACCOUNTS[0];
+  const acc = accountOptions.find((a) => a.id === activeAccount) ?? accountOptions[0];
 
   const cycleAccount = () => {
-    const ids = ACCOUNTS.map((a) => a.id);
+    if (accountOptions.length < 2) return;
+    const ids = accountOptions.map((a) => a.id);
     const idx = ids.indexOf(activeAccount);
     setActiveAccount(ids[(idx + 1) % ids.length]);
   };
 
   return (
-    <div className={styles.root} style={{ background: theme.bg, color: theme.text }}>
+    <div className={styles.root} style={{ background: theme.bg, color: theme.text, position: 'relative' }}>
+      {!tourDone && <OnboardingTour />}
       <TopMeta theme={theme} activeAccount={activeAccount} onAccountSwitcher={cycleAccount} />
 
       <div className={styles.masthead} style={{ borderBottomColor: theme.border }}>
@@ -88,9 +100,11 @@ export function Dashboard() {
             Lumen
           </Masthead>
           <button
+            type="button"
             className={styles.searchBtn}
             style={{ borderColor: theme.border, color: theme.textMuted }}
             aria-label="Search all inboxes"
+            onClick={() => setPaletteOpen(true)}
           >
             <svg width="11" height="11" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
               <circle cx="7" cy="7" r="5" />
@@ -100,7 +114,7 @@ export function Dashboard() {
           </button>
         </div>
         <Mono color={theme.textSubtle} size={9.5} tracking="0.18em">
-          DAILY · MORNING EDITION · {acc.label.toUpperCase()} · {activeSubs.length} ACTIVE
+          DAILY · MORNING EDITION · {(acc?.label ?? 'ALL').toUpperCase()} · {activeSubs.length} ACTIVE
         </Mono>
       </div>
 
@@ -133,13 +147,21 @@ export function Dashboard() {
         currency={currency}
         subs={activeSubs}
         onOpenSub={(s: Subscription) => setOpenSubId(s.id)}
+        onOpenAlerts={() => navigate('/alerts')}
       />
 
       <Section
         theme={theme}
         kicker="UP NEXT · 14 DAYS"
         action={
-          <span className={styles.sectionLink} style={{ color: theme.accent }}>
+          <span
+            className={styles.sectionLink}
+            style={{ color: theme.accent }}
+            onClick={() => navigate('/calendar')}
+            onKeyDown={(e) => e.key === 'Enter' && navigate('/calendar')}
+            role="button"
+            tabIndex={0}
+          >
             SEE ALL →
           </span>
         }

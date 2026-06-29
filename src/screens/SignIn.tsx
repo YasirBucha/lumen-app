@@ -34,7 +34,7 @@ export function SignIn() {
 
   const handleSignIn = async () => {
     await signIn();
-    navigate('/scanning');
+    navigate('/');
   };
 
   return (

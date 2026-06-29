@@ -1,0 +1,109 @@
+.root {
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rootCompact {
+  padding: 14px 22px;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.avatarRow {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.avatars {
+  display: flex;
+  align-items: center;
+}
+
+.perSeat {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.perSeatAmount {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.perSeatLabel {
+  margin-top: 4px;
+  display: block;
+}
+
+.detailRow {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.member {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.memberDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.memberDotEmpty {
+  background: transparent;
+  border: 1px dashed var(--border);
+}
+
+.note {
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 13px;
+  line-height: 1.45;
+  letter-spacing: -0.005em;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  color: #fff;
+  position: relative;
+}
+
+.avatarEmpty {
+  background: transparent;
+  border: 2px dashed var(--border);
+  color: var(--text-subtle);
+}
+
+.avatarPlus {
+  font-size: 14px;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  opacity: 0.7;
+}

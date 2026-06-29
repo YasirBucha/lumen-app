@@ -1,0 +1,109 @@
+.root {
+  padding: 18px 24px 22px;
+  border-bottom: 1px solid var(--border);
+}
+
+.rootCompact {
+  padding: 18px 22px 22px;
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 22px;
+}
+
+.line {
+  position: absolute;
+  left: 5.5px;
+  top: 8px;
+  bottom: 8px;
+  width: 1px;
+}
+
+.event {
+  position: relative;
+}
+
+.eventLast {
+  padding-bottom: 0;
+}
+
+.eventNotLast {
+  padding-bottom: 20px;
+}
+
+.node {
+  position: absolute;
+  left: -22px;
+  top: 4px;
+  width: 11px;
+  height: 11px;
+  box-sizing: border-box;
+}
+
+.nodeSquare {
+  border-radius: 0;
+}
+
+.nodeRound {
+  border-radius: 50%;
+}
+
+.transition {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  flex-wrap: wrap;
+}
+
+.badgeFrom {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  padding: 3px 7px;
+  border: 1px solid var(--border);
+}
+
+.badgeTo {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  padding: 3px 7px;
+  border: 1px solid;
+}
+
+.headline {
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 15.5px;
+  letter-spacing: -0.015em;
+  line-height: 1.3;
+}
+
+.headlineCompact {
+  font-size: 15px;
+}
+
+.detail {
+  margin-top: 4px;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 12.5px;
+  line-height: 1.4;
+}
+
+.arrow {
+  flex-shrink: 0;
+}

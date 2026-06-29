@@ -1,26 +1,62 @@
 import type { CSSProperties } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { parseCallableError, triggerGmailInitialSync } from '../lib/gmailConnect';
 import { useTheme } from '../hooks/useTheme';
 import { useSubStore } from '../store/subStore';
+import { useUiStore } from '../store/uiStore';
 import { fmtMoney } from '../lib/format';
 import { BigNumber, Mono, ScreenHead } from '../components/primitives';
 import { MerchantGlyph } from '../components/primitives/MerchantGlyph';
 import styles from './Scanning.module.css';
 
-const TOTAL_EMAILS = 14_823;
-
 export function Scanning() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const setConnectOpen = useUiStore((s) => s.setConnectOpen);
   const subs = useSubStore((s) => s.subscriptions);
+  const gmailAccounts = useSubStore((s) => s.gmailAccounts);
   const [pct, setPct] = useState(8);
   const [tickerIdx, setTickerIdx] = useState(0);
+  const [scannedTotal, setScannedTotal] = useState(0);
+  const [parsedTotal, setParsedTotal] = useState(0);
+  const [error, setError] = useState('');
+  const syncStarted = useRef(false);
+
+  const account = gmailAccounts.find((a) => a.status === 'syncing') ?? gmailAccounts[0];
 
   useEffect(() => {
-    const t = setInterval(() => setPct((p) => Math.min(100, p + 1.5)), 60);
-    return () => clearInterval(t);
-  }, []);
+    if (!account || syncStarted.current) return;
+    syncStarted.current = true;
+
+    let cancelled = false;
+    setPct(12);
+
+    const anim = setInterval(() => {
+      setPct((p) => Math.min(92, p + 1.5));
+    }, 70);
+
+    void (async () => {
+      try {
+        const result = await triggerGmailInitialSync(account.id);
+        if (cancelled) return;
+        clearInterval(anim);
+        setScannedTotal(result.scanned);
+        setParsedTotal(result.parsed);
+        setPct(100);
+      } catch (e) {
+        if (cancelled) return;
+        clearInterval(anim);
+        setError(parseCallableError(e));
+        setPct(100);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+      clearInterval(anim);
+    };
+  }, [account]);
 
   useEffect(() => {
     if (!subs.length) return;
@@ -28,8 +64,33 @@ export function Scanning() {
     return () => clearInterval(t);
   }, [subs.length]);
 
-  const found = Math.min(subs.length, Math.floor((pct / 100) * subs.length) + 1);
-  const scanned = Math.floor((pct / 100) * TOTAL_EMAILS);
+  if (!account) {
+    return (
+      <div className={styles.root} style={{ background: theme.bg, color: theme.text, '--border': theme.border } as CSSProperties}>
+        <div className={styles.headPad}>
+          <ScreenHead theme={theme} kicker="NO MAILBOX" masthead="Connect" italic="Gmail" meta="INBOX ACCESS REQUIRED" />
+        </div>
+        <div className={styles.body} style={{ padding: '40px 24px', textAlign: 'center' }}>
+          <Mono color={theme.textMuted} size={10} tracking="0.16em">
+            SIGN-IN ONLY VERIFIES YOU — CONNECT GMAIL TO SCAN RECEIPTS
+          </Mono>
+        </div>
+        <div className={styles.footer} style={{ borderTopColor: theme.border }}>
+          <button
+            type="button"
+            className={`${styles.cta} ${styles.ctaReady}`}
+            style={{ background: theme.accent, color: theme.accentInk }}
+            onClick={() => setConnectOpen(true)}
+          >
+            Connect Gmail →
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const found = parsedTotal || subs.length;
+  const scanned = scannedTotal || Math.floor((pct / 100) * 500);
   const current = subs[tickerIdx];
   const ready = pct >= 100;
 
@@ -39,10 +100,10 @@ export function Scanning() {
         <ScreenHead
           theme={theme}
           kicker="EDITION IN PROGRESS"
-          rightKicker="LIVE"
+          rightKicker={error ? 'ERROR' : 'LIVE SYNC'}
           masthead="Filing the"
           italic="ledger"
-          meta="READING · PERSONAL@GMAIL.COM"
+          meta={`READING · ${account.email.toUpperCase()}`}
         />
       </div>
 
@@ -55,11 +116,10 @@ export function Scanning() {
               cy="100"
               r="92"
               fill="none"
-              stroke={theme.accent}
+              stroke={error ? theme.cancel : theme.accent}
               strokeWidth="1.5"
               strokeDasharray={`${(pct / 100) * 578} 578`}
               strokeLinecap="butt"
-              style={{ transition: 'stroke-dasharray 0.3s ease' }}
             />
           </svg>
           <div className={styles.ringCenter}>
@@ -68,7 +128,7 @@ export function Scanning() {
             </BigNumber>
             <div style={{ marginTop: 10 }}>
               <Mono color={theme.textMuted} size={9.5} tracking="0.18em">
-                SCANNING
+                {error ? 'FAILED' : 'SCANNING'}
               </Mono>
             </div>
           </div>
@@ -95,7 +155,13 @@ export function Scanning() {
           </div>
         </div>
 
-        {current && (
+        {error && (
+          <Mono color={theme.cancel} size={9.5} tracking="0.14em" style={{ display: 'block', textAlign: 'center', padding: '0 24px' }}>
+            {error}
+          </Mono>
+        )}
+
+        {current && !error && (
           <div className={styles.ticker}>
             <Mono color={theme.textSubtle} size={9} tracking="0.18em" style={{ display: 'block', marginBottom: 10 }}>
               LATEST VERIFICATION
@@ -125,11 +191,11 @@ export function Scanning() {
           onClick={() => navigate('/')}
           className={`${styles.cta} ${ready ? styles.ctaReady : styles.ctaPending}`}
           style={{
-            background: ready ? theme.accent : 'transparent',
-            color: ready ? theme.accentInk : theme.textMuted,
+            background: ready && !error ? theme.accent : 'transparent',
+            color: ready && !error ? theme.accentInk : theme.textMuted,
           }}
         >
-          {ready ? 'See your subscriptions →' : `Scanning ${scanned.toLocaleString()} emails…`}
+          {error ? 'Back to dashboard' : ready ? 'See your subscriptions →' : `Scanning ${scanned.toLocaleString()} emails…`}
         </button>
       </div>
     </div>

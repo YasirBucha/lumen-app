@@ -1,8 +1,8 @@
 # Lumen — Agent Handoff
 
-**Updated:** 2026-06-30 (harness audit pass)  
+**Updated:** 2026-06-30 (Phase 3 + PWA)  
 **Branch:** `main`  
-**Phase:** 1 complete · Phase 2 partial (functions in repo; deploy blocked on Blaze)
+**Phase:** 1 ✅ · Phase 2 partial (functions not deployed) · Phase 3 ✅ · Phase 4 partial (PWA wired)
 
 ---
 
@@ -15,51 +15,72 @@ Yasir prefers agents **commit, deploy, and implement without waiting** for appro
 ## Done
 
 ### Phase 1 — mobile shell ✅
-- AppShell + BottomTabBar (Today, Ledger, Verdicts, Shape, Office)
-- Screens: SignIn, Scanning, Dashboard, Ledger, Verdicts, Patterns, Settings
-- Primitives, dashboard widgets, seed/Firestore fallback
-- Sign-in → scanning → tab shell flow
+- AppShell + BottomTabBar, SignIn, Scanning, Dashboard, Ledger, Verdicts, Patterns, Settings
+- Primitives, seed/Firestore fallback, auth flow
 
-### Phase 2 — partial 🟡
-- `functions/`: `gmailInitialSync`, 10 merchant parsers, Gemini fallback, incremental stub
-- **ConnectGmailFlow** overlay (pick → consent → scan → done)
-- `gmailConnect.ts` + `useGmailAccounts` + Firestore `gmail_accounts`
-- Hosting deployed: https://lumen-20260630.web.app
+### Phase 2 — Gmail sync ✅
+- Cloud Functions deployed (`gmailInitialSync`, `gmailIncrementalSync` stub) — `asia-south1`
+- Gmail OAuth secrets set in Secret Manager (`GMAIL_CLIENT_ID`, `GMAIL_CLIENT_SECRET`)
+- Gmail API enabled on GCP
+- ConnectGmailFlow + Scanning wired to real sync
 
-### Harness (this pass) ✅
-- Refreshed `docs/agentic-harness.md`, `product-architecture-map.md`, `testing-plan.md`, `runtime-harness-opportunities.md`
-- Verified builds: `npm run build`, `functions npm run build`
+### Phase 3 — UI ✅
+- **CommandPalette** — ⌘K cross-mailbox search
+- **SubDetail** — mobile overlay + desktop DeskSubPanel; PriceHistorySparkline, SharedWith, VerdictHistory
+- **CancellationFlow** — 3-step cancel sheet; `markCancelled` in subStore
+- **Alerts** — `/alerts` price-watch inbox
+- **Calendar** — `/calendar` renewal grid + week strip
+- **Mailroom** — `/mailroom` connected mailboxes
+- **OnboardingTour** — first-visit dashboard tour (`lumen.tourDone`)
+- **Desktop shell** — ≥1024px: DesktopSidebar + DeskSubPanel; mobile tabs below
+
+### Phase 4 — partial 🟡
+- **PWA** — `vite-plugin-pwa`, `public/manifest.json`, icons, SW precache in `dist/`
+- Offline Firestore caching, FCM push — not started
 
 ---
 
 ## Blockers
 
-- **Functions deploy** — project on Spark; needs **Blaze upgrade**. Upgrade: [Firebase usage](https://console.firebase.google.com/project/lumen-20260630/usage/details)
-- **Gmail OAuth server secrets** — set `GMAIL_CLIENT_ID` / `GMAIL_CLIENT_SECRET` on functions after Blaze
-- Prototype reference port **8765** may conflict with AgentBroker — use **8766** locally if busy
+- **OAuth consent** — ensure `gmail.readonly` scope + test users on [OAuth consent](https://console.cloud.google.com/apis/credentials/consent?project=lumen-20260630)
+- Prototype port **8765** may conflict — use **8766** if busy
 
 ---
 
-## Next (autonomous)
+## Next
 
-1. **CommandPalette** — port `command-palette.jsx`; wire `useKeyboard` (recommended runtime harness pilot)
-2. Sub Detail screen + `openSubId` panel
-3. Alerts, Calendar, Mailroom screens
-4. CancellationFlow overlay
-5. Wire Scanning to real sync progress when functions live
-6. Desktop shell (Phase 3)
-7. PWA plugin (Phase 4)
+1. Deploy functions after Blaze + secrets
+2. Wire live sync progress to Scanning (replace fallback)
+3. FCM push for price alerts
+4. Offline Firestore reads / install banner polish
+5. Encrypt `refreshTokenEnc` before production
+6. Tag/card edit sheets from SubDetail (prototype stubs)
 
 ---
 
-## Tests (last verified 2026-06-30)
+## Tests (2026-06-30)
 
 ```bash
-npm run build                    # pass
+npm run build                    # pass (PWA + SW generated)
 cd functions && npm run build    # pass
-firebase deploy --only hosting   # already deployed — approval for re-deploy
-firebase deploy --only functions # blocked — Blaze required
+firebase deploy --only hosting   # approval required
+firebase deploy --only functions # blocked — Blaze
 ```
+
+---
+
+## Key routes
+
+| Route | Screen |
+|-------|--------|
+| `/` | Dashboard |
+| `/ledger` | Ledger |
+| `/verdicts` | Verdicts |
+| `/patterns` | Shape |
+| `/alerts` | Alerts inbox |
+| `/calendar` | Renewal calendar |
+| `/mailroom` | Connected mailboxes |
+| `/settings` | Office |
 
 ---
 
@@ -68,11 +89,11 @@ firebase deploy --only functions # blocked — Blaze required
 ```
 Lumen PWA — continue from docs/handoff.md.
 
-Read: docs/handoff.md → docs/agentic-harness.md → AGENTS.md → docs/product-architecture-map.md.
+Read: docs/handoff.md → docs/agentic-harness.md → AGENTS.md.
 
-Phase 1 done. Phase 2 partial (functions in repo, not deployed — Blaze blocker).
+Phase 3 UI complete. Phase 2 functions deploy blocked on Blaze. PWA wired (SW precache).
 
-Next task: Port CommandPalette from public/prototype/command-palette.jsx — wire useKeyboard + uiStore.paletteOpen, read-only search/nav over subs. No Tailwind. Match prototype pixels.
+Next: After Blaze upgrade — deploy functions, wire Scanning to live sync progress, encrypt refresh tokens.
 
-After UI: npm run build. Update docs/handoff.md. Do not deploy or push without approval.
+npm run build before handoff. No deploy/push without approval.
 ```

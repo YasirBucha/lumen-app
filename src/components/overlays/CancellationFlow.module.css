@@ -1,0 +1,265 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-end;
+}
+
+.sheet {
+  width: 100%;
+  max-height: 92%;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--text);
+  border-top: 1px solid var(--border-hi);
+  box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.3);
+  padding-bottom: 36px;
+}
+
+.handle {
+  display: flex;
+  justify-content: center;
+  padding: 10px 0 6px;
+}
+
+.handleBar {
+  width: 36px;
+  height: 3px;
+  background: var(--border);
+}
+
+.kicker {
+  padding: 12px 24px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stepBars {
+  display: flex;
+  gap: 4px;
+}
+
+.stepBar {
+  width: 18px;
+  height: 2px;
+}
+
+.headBlock {
+  padding: 14px 24px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.headline {
+  font-family: 'Fraunces', serif;
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+.italic {
+  font-style: italic;
+  font-weight: 400;
+}
+
+.subhead {
+  margin-top: 10px;
+}
+
+.steps {
+  padding: 14px 24px 0;
+}
+
+.stepRow {
+  display: flex;
+  gap: 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--border);
+}
+
+.stepRowFirst {
+  border-top: none;
+}
+
+.stepNum {
+  padding-top: 3px;
+  min-width: 22px;
+}
+
+.stepText {
+  font-family: 'Fraunces', serif;
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: -0.005em;
+}
+
+.linkBox {
+  margin: 18px 24px 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.linkUrl {
+  margin-top: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  word-break: break-all;
+  letter-spacing: 0.02em;
+}
+
+.reclaim {
+  padding: 18px 24px 0;
+}
+
+.reclaimGrid {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.reclaimValue {
+  font-family: 'Fraunces', serif;
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.reclaimLabel {
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.reclaimDivider {
+  border-left: 1px solid var(--border);
+  padding-left: 16px;
+}
+
+.pullQuote {
+  padding: 22px 24px;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 17px;
+  line-height: 1.45;
+  letter-spacing: -0.01em;
+  border-bottom: 1px solid var(--border);
+}
+
+.quoteMark {
+  font-size: 42px;
+  line-height: 0.4;
+  margin-bottom: 12px;
+  font-style: normal;
+  font-weight: 700;
+}
+
+.quoteBy {
+  margin-top: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.choices {
+  padding: 4px 24px 0;
+}
+
+.choiceRow {
+  display: grid;
+  grid-template-columns: 32px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.iconBox {
+  width: 28px;
+  height: 28px;
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBoxAccent {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.choiceTitle {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+}
+
+.choiceSub {
+  margin-top: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.actions {
+  padding: 22px 24px 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.primaryBtn {
+  height: 50px;
+  border: none;
+  cursor: pointer;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.secondaryBtn {
+  height: 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+
+.proofSteps {
+  padding: 14px 24px 0;
+}
+
+.proofRow {
+  display: flex;
+  gap: 14px;
+  padding: 11px 0;
+  border-top: 1px solid var(--border);
+}
+
+.proofRowFirst {
+  border-top: none;
+}
