@@ -1,0 +1,5 @@
+.mono {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  line-height: 1;
+}

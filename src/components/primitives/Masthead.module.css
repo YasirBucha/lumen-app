@@ -1,0 +1,11 @@
+.root {
+  font-family: var(--font-display);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.025em;
+}
+
+.italic {
+  font-style: italic;
+  font-weight: 400;
+}

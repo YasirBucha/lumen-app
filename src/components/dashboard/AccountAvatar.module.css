@@ -1,0 +1,30 @@
+.topMeta {
+  padding: 56px 24px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border: 1px solid;
+}
+
+.all {
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #c8413a, #5b7db1, #9bae7c, #c8413a);
+}
+
+.single {
+  border-radius: 50%;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+}

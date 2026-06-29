@@ -1,0 +1,16 @@
+.root {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.kicker {
+  margin-bottom: 6px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}

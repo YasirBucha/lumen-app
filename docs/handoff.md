@@ -12,46 +12,64 @@ Production PWA matching `public/prototype/` pixel-perfectly, on Firebase, Gmail 
 
 ---
 
-## Done (this session / recent)
+## Done (this session)
 
-- Extracted handoff tar.gz; prototype in `public/prototype/`.  
-- Migrated from Hono/Cloudflare stub → **Vite + React 18 + TS**.  
-- CSS tokens, globals, typography.  
-- Primitives ported to `src/components/primitives/`.  
-- Stores: auth, subs, ui. Hooks: theme, subscriptions, keyboard.  
-- Screens: **SignIn**, **Dashboard** (+ dashboard cards, trend, category stack).  
-- Seed data in `src/lib/seedData.ts`; Firestore listener with seed fallback.  
-- Firebase scaffold: `firebase.json`, `firestore.rules`, `.firebaserc` (placeholder project ID).  
-- `npm run build` passes.  
-- Agent harness docs created (`docs/*`).
+- Created Firebase project **`lumen-20260630`** (display name: Lumen).
+- Registered web app **Lumen PWA**; SDK config in local **`.env`** (gitignored).
+- Updated **`.firebaserc`** → `lumen-20260630`.
+- Migrated **`firebase-config.ts`** to Vite env vars (`.env.example` placeholders; matches GTD pattern).
+- **`firebase.ts`**, **`authStore`**, **`useSubscriptions`** guard when Firebase not configured.
+- Firestore database created in **`asia-south1`**; **rules deployed**.
+- **`npm run build`** passes.
+- Dev server verified: SignIn renders at `http://localhost:5173/signin` (matches prototype layout).
 
 ---
 
-## Not done / blockers
+## Done (prior sessions)
 
-- [ ] Real Firebase project ID + `firebase-config.ts` (owner or cross-project credentials).  
-- [ ] `firebase deploy --only hosting` — **needs approval**.  
-- [ ] Phase 1 remaining: Firestore collections live, full auth flow verified end-to-end.  
-- [ ] Phases 2–4 per `AGENTS.md`.  
-- [ ] PWA plugin not configured.  
-- [ ] `functions/` not created.  
-- [ ] README still references old Hono entry — harness docs are authoritative for dev.
+- Vite + React 18 + TS migration; CSS tokens, primitives, stores, hooks.
+- Screens: **SignIn**, **Dashboard** (+ cards, trend, category stack).
+- Seed data + Firestore listener with seed fallback.
+- Agent harness docs (`docs/*`).
+
+---
+
+## Blockers
+
+- [ ] **Firebase Auth not initialized** — Console → [Authentication](https://console.firebase.google.com/project/lumen-20260630/authentication) → **Get started** → enable **Google** → add **`localhost`** to Authorized domains. (CLI init failed: billing quota exceeded on shared billing account; Spark manual setup required.)
+- [ ] **`firebase deploy --only hosting`** — needs owner approval (build ready in `dist/`).
+- [ ] Git push — uncommitted app + harness; needs approval.
+- [ ] Phases 2–4 per `AGENTS.md`.
+
+---
+
+## Firebase project
+
+| Field | Value |
+|-------|-------|
+| Project ID | `lumen-20260630` |
+| Console | https://console.firebase.google.com/project/lumen-20260630/overview |
+| Firestore region | `asia-south1` |
+| Hosting | not deployed yet |
+| Auth | **not enabled** (owner console step above) |
+
+Local credentials: copy `.env.example` → `.env` (values already written locally; not in git).
 
 ---
 
 ## Files agents should not touch without reason
 
-- `public/prototype/*` (reference only)  
-- `src/lib/firebase-config.ts` (secrets)  
+- `public/prototype/*` (reference only)
+- `.env` (secrets)
 - `lumen-handoff.tar.gz`
 
 ---
 
 ## Exact next step
 
-1. Populate `src/lib/firebase-config.ts` and `.firebaserc` from Yasir’s Firebase project (same ecosystem credentials as other projects — do not paste secrets in chat).  
-2. Verify Google sign-in on `http://127.0.0.1:5173/signin`.  
-3. With owner approval: `npm run build && firebase deploy --only hosting`.  
+1. **Owner:** Enable Google Auth in Firebase Console (link above).
+2. Verify sign-in end-to-end on `http://localhost:5173/signin`.
+3. With approval: `npm run build && firebase deploy --only hosting`.
 4. Continue Phase 1 checklist in `AGENTS.md`, then Phase 2 (`firebase init functions`).
 
 ---
@@ -59,15 +77,19 @@ Production PWA matching `public/prototype/` pixel-perfectly, on Firebase, Gmail 
 ## Tests already run
 
 ```bash
-npm run build   # pass (2026-06-30)
+npm run build                              # pass (2026-06-30)
+firebase deploy --only firestore:rules     # pass → lumen-20260630
+# SignIn page load + visual check on :5173  # pass
+# Google sign-in popup                      # blocked — Auth not initialized
 ```
 
 ---
 
 ## Owner approvals still needed
 
-- Firebase deploy  
-- Git push (app code + harness currently uncommitted together)  
+- Enable Firebase Auth (console — 2 min)
+- Firebase Hosting deploy
+- Git push (app code + harness currently uncommitted together)
 - Gmail OAuth client secrets for Cloud Functions (Phase 2)
 
 ---
@@ -79,8 +101,8 @@ Continue Lumen PWA at /Users/yb/Dev/projects/Lumen.
 
 Read first: docs/handoff.md → docs/agentic-harness.md → AGENTS.md.
 
-Phase 1 in progress: Vite React app with SignIn + Dashboard, seed data, Firebase placeholders.
-Build passes. Next: wire real firebase-config + .firebaserc, verify Google Auth, deploy hosting with approval.
+Phase 1: Firebase project lumen-20260630 wired (.env + .firebaserc). Firestore rules deployed. Build passes.
+Blocker: enable Google Auth in Firebase Console, then verify sign-in. Deploy hosting with approval.
 
 Rules: CSS Modules only (no Tailwind). Match public/prototype/ exactly. Do not deploy/push without approval.
 ```

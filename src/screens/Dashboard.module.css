@@ -1,0 +1,49 @@
+.root {
+  min-height: 100dvh;
+  overflow-y: auto;
+  padding-bottom: 110px;
+}
+
+.masthead {
+  padding: 4px 24px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.mastheadRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 6px;
+}
+
+.searchBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: transparent;
+  border: 1px solid;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.sectionLink {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.emptyUpcoming {
+  padding: 12px 0;
+  font-size: 13px;
+  font-family: var(--font-display);
+  font-style: italic;
+}

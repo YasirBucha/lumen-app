@@ -1,0 +1,26 @@
+.root {
+  padding: 22px 24px 24px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+
+.tick {
+  position: absolute;
+  top: 26px;
+  left: 24px;
+  width: 18px;
+  height: 1.5px;
+  display: block;
+}
+
+.labelWrap {
+  padding-left: 26px;
+}
+
+.valueWrap {
+  margin-top: 10px;
+}
+
+.children {
+  margin-top: 16px;
+}

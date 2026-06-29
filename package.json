@@ -1,20 +1,25 @@
 {
-  "name": "webapp",
+  "name": "lumen",
+  "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "preview": "wrangler pages dev",
-    "deploy": "npm run build && wrangler pages deploy",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "build": "tsc -b && vite build",
+    "preview": "vite preview"
   },
   "dependencies": {
-    "hono": "^4.12.26"
+    "firebase": "^11.6.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^7.5.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@hono/vite-build": "^1.2.0",
-    "@hono/vite-dev-server": "^0.25.2",
+    "@types/react": "^18.3.20",
+    "@types/react-dom": "^18.3.6",
+    "@vitejs/plugin-react": "^4.4.1",
+    "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "wrangler": "^4.4.0"
+    "vite-plugin-pwa": "^0.21.2"
   }
 }

@@ -1,0 +1,13 @@
+.logo {
+  display: inline-flex;
+  align-items: baseline;
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.dot {
+  font-style: italic;
+  font-weight: 400;
+}

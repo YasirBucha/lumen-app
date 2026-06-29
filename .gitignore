@@ -1,5 +1,7 @@
 # prod
 dist/
+.firebase/
+*.tsbuildinfo
 
 # dev
 .yarn/

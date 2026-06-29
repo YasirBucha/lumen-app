@@ -1,0 +1,37 @@
+:root[data-theme='light'] {
+  --bg: #f1ecdf;
+  --surface: #fbf8ee;
+  --surface-raised: #fffef7;
+  --text: #1a2738;
+  --text-muted: rgba(26, 39, 56, 0.62);
+  --text-subtle: rgba(26, 39, 56, 0.4);
+  --border: rgba(26, 39, 56, 0.16);
+  --border-hi: rgba(26, 39, 56, 0.28);
+  --accent: #8a1f1f;
+  --accent-ink: #fbf8ee;
+  --good: #4f6b3c;
+  --review: #a57f2b;
+  --cancel: #8a1f1f;
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-ui: 'Inter Tight', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e1623;
+  --surface: #14202f;
+  --surface-raised: #1a2738;
+  --text: #f2ead6;
+  --text-muted: rgba(242, 234, 214, 0.72);
+  --text-subtle: rgba(242, 234, 214, 0.5);
+  --border: rgba(242, 234, 214, 0.12);
+  --border-hi: rgba(242, 234, 214, 0.22);
+  --accent: #c8413a;
+  --accent-ink: #f2ead6;
+  --good: #8fae7c;
+  --review: #d6b26a;
+  --cancel: #c8413a;
+  --font-display: 'Fraunces', 'Times New Roman', serif;
+  --font-ui: 'Inter Tight', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}

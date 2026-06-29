@@ -1,0 +1,24 @@
+.root {
+  padding: 8px 24px 18px;
+}
+
+.kickerRow {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 12px;
+}
+
+.meta {
+  margin-top: 8px;
+}
+
+.section {
+  /* padding/border set inline */
+}
+
+.sectionHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
