@@ -49,6 +49,7 @@ export function Dashboard() {
   const activeSubs = subs.filter(
     (s) => s.status === 'active' && (activeAccount === 'all' || s.account === activeAccount),
   );
+  const trend = useMemo(() => buildTrend(activeSubs), [activeSubs]);
 
   if (activeSubs.length === 0) {
     return (
@@ -68,7 +69,6 @@ export function Dashboard() {
 
   const monthly = activeSubs.reduce((a, s) => a + monthlyEquivalent(s), 0);
   const yearly = activeSubs.reduce((a, s) => a + yearlyEquivalent(s), 0);
-  const trend = useMemo(() => buildTrend(activeSubs), [activeSubs]);
   const upcoming = activeSubs
     .map((s) => ({ ...s, _d: daysUntil(s.nextCharge) }))
     .filter((s) => s._d >= 0 && s._d <= 14)

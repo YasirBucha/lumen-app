@@ -1,6 +1,7 @@
 import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuthStore } from '../store/authStore';
 import { parseCallableError, triggerGmailInitialSync } from '../lib/gmailConnect';
 import { useTheme } from '../hooks/useTheme';
 import { useSubStore } from '../store/subStore';
@@ -13,6 +14,7 @@ import styles from './Scanning.module.css';
 export function Scanning() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
   const setConnectOpen = useUiStore((s) => s.setConnectOpen);
   const subs = useSubStore((s) => s.subscriptions);
   const gmailAccounts = useSubStore((s) => s.gmailAccounts);
@@ -26,7 +28,7 @@ export function Scanning() {
   const account = gmailAccounts.find((a) => a.status === 'syncing') ?? gmailAccounts[0];
 
   useEffect(() => {
-    if (!account || syncStarted.current) return;
+    if (!account || !user || syncStarted.current) return;
     syncStarted.current = true;
 
     let cancelled = false;
@@ -38,7 +40,7 @@ export function Scanning() {
 
     void (async () => {
       try {
-        const result = await triggerGmailInitialSync(account.id);
+        const result = await triggerGmailInitialSync(user.uid, account.id);
         if (cancelled) return;
         clearInterval(anim);
         setScannedTotal(result.scanned);
@@ -56,6 +58,15 @@ export function Scanning() {
       cancelled = true;
       clearInterval(anim);
     };
+  }, [account, user]);
+
+  useEffect(() => {
+    if (!account) return;
+    const total = account.syncTotal ?? 0;
+    const processed = account.syncProcessed ?? 0;
+    if (total > 0) setPct((current) => Math.max(current, Math.min(99, (processed / total) * 100)));
+    setScannedTotal(processed);
+    setParsedTotal(account.syncParsed ?? 0);
   }, [account]);
 
   useEffect(() => {

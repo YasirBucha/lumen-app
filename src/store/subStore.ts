@@ -11,6 +11,7 @@ interface SubState {
   setGmailAccounts: (accounts: GmailAccount[]) => void;
   setActiveAccount: (id: string) => void;
   setOpenSubId: (id: string | null) => void;
+  updateSubscription: (id: string, patch: Partial<Subscription>) => void;
   addCancelledId: (id: string) => void;
   markCancelled: (id: string) => void;
 }
@@ -25,6 +26,10 @@ export const useSubStore = create<SubState>((set) => ({
   setGmailAccounts: (gmailAccounts) => set({ gmailAccounts }),
   setActiveAccount: (activeAccount) => set({ activeAccount }),
   setOpenSubId: (openSubId) => set({ openSubId }),
+  updateSubscription: (id, patch) =>
+    set((s) => ({
+      subscriptions: s.subscriptions.map((sub) => (sub.id === id ? { ...sub, ...patch } : sub)),
+    })),
   addCancelledId: (id) =>
     set((s) => ({
       cancelledIds: s.cancelledIds.includes(id) ? s.cancelledIds : [...s.cancelledIds, id],

@@ -20,7 +20,7 @@ Lumen is a Gmail-connected subscription intelligence app. It reads receipts and 
 |---|---|
 | `public/prototype/` | Complete high-fidelity interactive prototype (React + Babel, runs in browser) |
 | `public/prototype/index.html` | Visual source of truth — open in browser or serve on port **8765** |
-| `src/` | Production Vite + React 18 + TypeScript PWA (Phase 1 complete; Phase 2 partial) |
+| `src/` | Production Vite + React 18 + TypeScript PWA (Phases 1–4 implemented) |
 | `AGENTS.md` | **Full build plan** — read after `docs/handoff.md` |
 | `docs/agentic-harness.md` | Dev agent rules, ports, testing, handoff protocol |
 | `docs/handoff.md` | Current phase and exact next step for agents |
@@ -95,10 +95,10 @@ All 10 mobile screens, 8 desktop views, 5 overlays, full design system.
 ### ⏳ Production PWA
 | Phase | Features | Status |
 |---|---|---|
-| Phase 1 | PWA scaffold + Firebase Auth + Firestore + Dashboard | 🟡 In progress |
-| Phase 2 | Gmail Cloud Functions + 10 parsers + Gemini fallback | ⏳ Pending |
-| Phase 3 | All screens rebuilt in React/TS + responsive layout | ⏳ Pending |
-| Phase 4 | Offline mode + push notifications + PWA polish | ⏳ Pending |
+| Phase 1 | PWA scaffold + Firebase Auth + Firestore + Dashboard | ✅ Complete |
+| Phase 2 | Gmail Cloud Functions + 10 parsers + Gemini fallback | ✅ Deployed and live sync verified |
+| Phase 3 | All screens rebuilt in React/TS + responsive layout | ✅ Complete |
+| Phase 4 | Offline mode + push notifications + PWA polish | ✅ Implemented and VAPID-configured |
 
 ---
 

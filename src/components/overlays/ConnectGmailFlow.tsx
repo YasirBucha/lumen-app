@@ -4,7 +4,6 @@ import { useAuthStore } from '../../store/authStore';
 import { useTheme } from '../../hooks/useTheme';
 import { useUiStore } from '../../store/uiStore';
 import {
-  clearUserSubscriptions,
   connectGmailMailbox,
   parseCallableError,
   triggerGmailInitialSync,
@@ -14,11 +13,10 @@ import { BigNumber, Mono } from '../primitives';
 import styles from './ConnectGmailFlow.module.css';
 
 type Step = 'consent' | 'scan' | 'done' | 'error';
-type SyncPhase = 'authorizing' | 'clearing' | 'scanning';
+type SyncPhase = 'authorizing' | 'scanning';
 
 const PHASE_LABEL: Record<SyncPhase, string> = {
   authorizing: 'WAITING FOR GOOGLE APPROVAL…',
-  clearing: 'CLEARING OLD DATA…',
   scanning: 'SCANNING RECEIPTS — CAN TAKE 2–5 MIN…',
 };
 
@@ -31,7 +29,7 @@ export function ConnectGmailFlow() {
   const [syncPhase, setSyncPhase] = useState<SyncPhase>('authorizing');
   const [pct, setPct] = useState(0);
   const [error, setError] = useState('');
-  const [syncStats, setSyncStats] = useState<{ scanned: number; parsed: number } | null>(null);
+  const [syncStats, setSyncStats] = useState<{ scanned: number; parsed: number; subscriptions?: number } | null>(null);
 
   const target = useMemo(() => {
     if (!user?.email) return null;
@@ -74,14 +72,9 @@ export function ConnectGmailFlow() {
         const { accessToken } = await connectGmailMailbox(user.uid, target.id, target.color, target.label);
         if (cancelled) return;
 
-        setSyncPhase('clearing');
-        setPct(5);
-        await clearUserSubscriptions(user.uid);
-        if (cancelled) return;
-
         setSyncPhase('scanning');
         startScanAnim();
-        const result = await triggerGmailInitialSync(target.id, accessToken);
+        const result = await triggerGmailInitialSync(user.uid, target.id, accessToken);
         if (cancelled) return;
         if (anim) clearInterval(anim);
         setSyncStats(result);
@@ -192,10 +185,10 @@ export function ConnectGmailFlow() {
                 SYNC COMPLETE
               </Mono>
               <div className={styles.headline} style={{ color: theme.text }}>
-                <span className={styles.italic} style={{ color: theme.accent }}>{syncStats?.parsed ?? 0}</span> subscriptions filed.
+                <span className={styles.italic} style={{ color: theme.accent }}>{syncStats?.subscriptions ?? syncStats?.parsed ?? 0}</span> subscriptions filed.
               </div>
               <div className={styles.dek} style={{ color: theme.textMuted }}>
-                Scanned {syncStats?.scanned ?? 0} receipt emails from {target.email}. Your ledger now shows real data only.
+                Scanned {syncStats?.scanned ?? 0} billing emails from {target.email}. Receipts merged into your ledger.
               </div>
             </>
           )}
@@ -212,7 +205,9 @@ export function ConnectGmailFlow() {
                 {error}
               </div>
               <div className={styles.dek} style={{ color: theme.textMuted, marginTop: 12 }}>
-                Check OAuth consent has gmail.readonly scope, then try again.
+                {error.includes('timed out') || error.includes('deadline')
+                  ? 'The server may still have finished — close and check your dashboard.'
+                  : 'If this persists, check OAuth consent has gmail.readonly scope.'}
               </div>
             </>
           )}

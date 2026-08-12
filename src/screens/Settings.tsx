@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { useAuthStore } from '../store/authStore';
 import { useTheme } from '../hooks/useTheme';
 import { useUiStore } from '../store/uiStore';
@@ -6,6 +6,13 @@ import { useSubStore } from '../store/subStore';
 import { LumenLogo, Mono, ScreenHead } from '../components/primitives';
 import { TopMeta } from '../components/dashboard/AccountAvatar';
 import styles from './Settings.module.css';
+import {
+  disablePushNotifications,
+  enablePushNotifications,
+  isPushConfigured,
+  isPushEnabled,
+  listenForPushMessages,
+} from '../lib/notifications';
 
 function toneSub(t: string) {
   if (t === 'quiet') return 'Evidence-based';
@@ -37,6 +44,7 @@ function SettingsRow({
   danger,
   first,
   onClick,
+  onToggle,
 }: {
   theme: ReturnType<typeof useTheme>;
   icon?: React.ReactNode;
@@ -48,13 +56,23 @@ function SettingsRow({
   danger?: boolean;
   first?: boolean;
   onClick?: () => void;
+  onToggle?: () => void;
 }) {
   const titleColor = danger ? theme.accent : theme.text;
+  const action = toggle ? onToggle : onClick;
   return (
     <div
       className={`${styles.row} ${first ? styles.rowFirst : ''} ${!toggle && onClick ? styles.rowClickable : ''}`}
       style={{ borderTopColor: first ? 'transparent' : theme.border }}
-      onClick={toggle ? undefined : onClick}
+      onClick={action}
+      onKeyDown={(event) => {
+        if (action && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          action();
+        }
+      }}
+      role={action ? 'button' : undefined}
+      tabIndex={action ? 0 : undefined}
     >
       {icon}
       <div className={styles.body}>
@@ -93,6 +111,8 @@ export function Settings() {
   const uiTheme = useUiStore((s) => s.theme);
   const activeAccount = useSubStore((s) => s.activeAccount);
   const setActiveAccount = useSubStore((s) => s.setActiveAccount);
+  const [pushEnabled, setPushEnabled] = useState(() => (user ? isPushEnabled(user.uid) : false));
+  const [pushError, setPushError] = useState('');
 
   const initial = user?.displayName?.[0]?.toUpperCase() ?? 'Y';
 
@@ -100,6 +120,42 @@ export function Settings() {
     const ids = ['all', 'personal', 'work', 'family'];
     const idx = ids.indexOf(activeAccount);
     setActiveAccount(ids[(idx + 1) % ids.length]);
+  };
+
+  useEffect(() => {
+    if (!user || !pushEnabled) return;
+    let active = true;
+    let unsubscribe: () => void = () => {};
+    void listenForPushMessages((payload) => {
+      if (Notification.permission !== 'granted') return;
+      new Notification(payload.notification?.title ?? 'Lumen', {
+        body: payload.notification?.body ?? 'A subscription needs your attention.',
+      });
+    }).then((cleanup) => {
+      if (active) unsubscribe = cleanup;
+      else cleanup();
+    });
+    return () => {
+      active = false;
+      unsubscribe();
+    };
+  }, [pushEnabled, user]);
+
+  const togglePush = async () => {
+    if (!user) return;
+    setPushError('');
+    try {
+      if (pushEnabled) {
+        await disablePushNotifications(user.uid);
+        setPushEnabled(false);
+      } else {
+        const enabled = await enablePushNotifications(user.uid);
+        if (!enabled) throw new Error('Push is not configured for this build.');
+        setPushEnabled(true);
+      }
+    } catch (error) {
+      setPushError(error instanceof Error ? error.message : 'Push notifications unavailable.');
+    }
   };
 
   return (
@@ -156,7 +212,14 @@ export function Settings() {
         <SettingsRow theme={theme} first title="Read-only Gmail access" sub="Receipts & subscription mail" toggle on />
         <SettingsRow theme={theme} title="On-device extraction" sub="Email contents never leave your device" toggle on />
         <SettingsRow theme={theme} title="Verified data only" sub="No estimates. No guesses." toggle on />
-        <SettingsRow theme={theme} title="Notify on price increases" sub="Email + push when a renewal changes" toggle on />
+        <SettingsRow
+          theme={theme}
+          title="Notify on price increases"
+          sub={pushError || (isPushConfigured() ? 'Email + push when a renewal changes' : 'Add the Firebase web push key to enable')}
+          toggle
+          on={pushEnabled}
+          onToggle={() => void togglePush()}
+        />
       </SettingsGroup>
 
       <SettingsGroup title="DATA" theme={theme}>

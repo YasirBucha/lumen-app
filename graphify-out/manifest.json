@@ -3,6 +3,10 @@
     "mtime": 1782771210.1370587,
     "hash": "7e28f434bb09c11be2b8eb921e9f3c95"
   },
+  "/Users/yb/Dev/projects/Lumen/public/firebase-messaging-sw.js": {
+    "mtime": 1786555942.387994,
+    "hash": "882d1a2fcafe534727764880dda41854"
+  },
   "/Users/yb/Dev/projects/Lumen/public/prototype/onboarding-tour.jsx": {
     "mtime": 1782765501.0,
     "hash": "dff2da0f4e5c78465a375944264b5bd5"
@@ -72,68 +76,132 @@
     "hash": "ebce22a865c3199e33723fcca9ea804d"
   },
   "/Users/yb/Dev/projects/Lumen/functions/lib/geminiParser.js": {
-    "mtime": 1782775399.7611299,
-    "hash": "99416c400a44d9e7e04eb5a9916e4127"
+    "mtime": 1786571467.4239256,
+    "hash": "2f5c11833af8ad61229b47c63e793dd6"
   },
   "/Users/yb/Dev/projects/Lumen/functions/lib/gmailSync.js": {
-    "mtime": 1782775399.769147,
-    "hash": "ae4061bc079ac9abf22f760ff839e99a"
+    "mtime": 1786571467.5178473,
+    "hash": "09a196600ec698254b7b18398831d8ac"
   },
   "/Users/yb/Dev/projects/Lumen/functions/lib/index.js": {
-    "mtime": 1782775399.7702732,
-    "hash": "bd18dd143893a84fb4fa0c0510d2ec3e"
+    "mtime": 1786571467.5258224,
+    "hash": "4b950da956d80943d4b87e839abaeb15"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/gmailOAuth.js": {
+    "mtime": 1786571467.436989,
+    "hash": "382d6e7589ba80952d1f04c844d99cb1"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/registry.js": {
+    "mtime": 1786571467.3961992,
+    "hash": "14bfdeaf022cb89209a4a3bb38ef446d"
   },
   "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/types.js": {
-    "mtime": 1782775399.7575684,
+    "mtime": 1786571467.3687634,
     "hash": "9e3fa9db5d4c134349185b8ac35ac371"
   },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/merge.js": {
+    "mtime": 1786571467.4645214,
+    "hash": "8c0f0d06fbfa1ba36e6dc9ba072140b3"
+  },
   "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/index.js": {
-    "mtime": 1782775399.7642365,
-    "hash": "6e2fd87e9858feddf2638fd3f8620d3f"
+    "mtime": 1786571467.466417,
+    "hash": "09ac5e9cff83331b43c293b076e94c89"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/classifier.js": {
+    "mtime": 1786571467.415657,
+    "hash": "8474691e521b802865d139b3f7f5d22a"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/amount.js": {
+    "mtime": 1786571467.4089904,
+    "hash": "f1abe264ec7ee3c9d8c2c96064f17626"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/fallback.js": {
+    "mtime": 1786571467.4479225,
+    "hash": "46c2ba5b7dc27eba1bfc8752fc60542c"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/googlePlay.js": {
+    "mtime": 1786571467.4418464,
+    "hash": "c62495862b0b2094df1d1b1ea2d5d677"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/lib/parsers/pipeline.js": {
+    "mtime": 1786571467.455287,
+    "hash": "d2ed4d0ee8ede0decc6853f2ddae62be"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/gmailOAuth.ts": {
+    "mtime": 1786571072.920945,
+    "hash": "8de1dfef344f0a9ce07f0e8cf7320a17"
   },
   "/Users/yb/Dev/projects/Lumen/functions/src/geminiParser.ts": {
-    "mtime": 1782769618.2653708,
-    "hash": "6a4a15655ebef2ff1f23d35548b51800"
+    "mtime": 1783073620.7731214,
+    "hash": "365187fda6fc75b6d3358ecc7834b5f7"
   },
   "/Users/yb/Dev/projects/Lumen/functions/src/index.ts": {
-    "mtime": 1782774097.6176338,
-    "hash": "18bca9651eaeb3fa2296b6a67586c168"
+    "mtime": 1786571442.386229,
+    "hash": "b3f65c9def3035d2bf55c1b14d56ba80"
   },
   "/Users/yb/Dev/projects/Lumen/functions/src/gmailSync.ts": {
-    "mtime": 1782775379.4727824,
-    "hash": "c9513a5127c31b73791eac21ea8c1ee0"
+    "mtime": 1786555513.3417344,
+    "hash": "cba1ece597231e325a43d928262aad3f"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/fallback.ts": {
+    "mtime": 1783073620.8119626,
+    "hash": "61f413b2e26bf2f9c331e017637523e8"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/googlePlay.ts": {
+    "mtime": 1783073620.811993,
+    "hash": "451d6639e7062d65c97bcdc7b7941df4"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/pipeline.ts": {
+    "mtime": 1783073620.7744598,
+    "hash": "ae31ae1dc6386ee1342be730b64b6bfc"
   },
   "/Users/yb/Dev/projects/Lumen/functions/src/parsers/types.ts": {
-    "mtime": 1782769613.8406432,
-    "hash": "f12a93f0c2bb2a88383c7d15ad486224"
+    "mtime": 1783073620.7728333,
+    "hash": "d139f68abc8311d33c12f119e85239b9"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/registry.ts": {
+    "mtime": 1783073620.773551,
+    "hash": "0c766cbee6e39cb741c97718f242c6b3"
   },
   "/Users/yb/Dev/projects/Lumen/functions/src/parsers/index.ts": {
-    "mtime": 1782769960.3827055,
-    "hash": "799fee1d332726ce6ffdf94cfc6eefc7"
+    "mtime": 1783073620.786029,
+    "hash": "2891783c3b96e2107856c45cfa19fb9b"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/classifier.ts": {
+    "mtime": 1783073620.773573,
+    "hash": "16d997012c707eb63ae6b2c2db104c8a"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/amount.ts": {
+    "mtime": 1783073620.8119626,
+    "hash": "23c26c3231232d8cbc3209efa275e41d"
+  },
+  "/Users/yb/Dev/projects/Lumen/functions/src/parsers/merge.ts": {
+    "mtime": 1783073620.7744427,
+    "hash": "754807aefd352fb26bb521d7ef8a7b04"
   },
   "/Users/yb/Dev/projects/Lumen/src/App.tsx": {
-    "mtime": 1782771187.1067126,
-    "hash": "ef5958772b822dc3dfd700e2d71632c7"
+    "mtime": 1786554861.9047182,
+    "hash": "a3c7df797379a61594f5b17c18d857d6"
   },
   "/Users/yb/Dev/projects/Lumen/src/main.tsx": {
     "mtime": 1782771210.3951569,
     "hash": "513324e43c71ef90b466b28167c5c465"
   },
   "/Users/yb/Dev/projects/Lumen/src/vite-env.d.ts": {
-    "mtime": 1782771213.3331437,
-    "hash": "0cad6914a1a0abdd119cc87f91a3d30c"
+    "mtime": 1786554717.2273166,
+    "hash": "c121edd31902ac8e2f3a1903f8965306"
   },
   "/Users/yb/Dev/projects/Lumen/src/types/index.ts": {
-    "mtime": 1782769953.13602,
-    "hash": "05011542b7ea8e00b7e0f4e58b13b3eb"
+    "mtime": 1786554534.848324,
+    "hash": "d8e68cd7e254080c68ac41abf8bd5733"
   },
   "/Users/yb/Dev/projects/Lumen/src/screens/Settings.tsx": {
-    "mtime": 1782769657.3386402,
-    "hash": "bb30339fd11a16a153ae4200eadc611e"
+    "mtime": 1786555526.5537698,
+    "hash": "4e8c21909aac1ed1ac76af16e6b77649"
   },
   "/Users/yb/Dev/projects/Lumen/src/screens/Dashboard.tsx": {
-    "mtime": 1782773561.7150395,
-    "hash": "4bede50c7703ace001d0aacbcbe0d44b"
+    "mtime": 1786570884.0480158,
+    "hash": "e858a51dbe85d05e7b297e4bb0135aa9"
   },
   "/Users/yb/Dev/projects/Lumen/src/screens/Mailroom.tsx": {
     "mtime": 1782774515.6974995,
@@ -156,8 +224,8 @@
     "hash": "552ef8ac9bdf9d16fb0ef5051d29259b"
   },
   "/Users/yb/Dev/projects/Lumen/src/screens/Scanning.tsx": {
-    "mtime": 1782773539.9792435,
-    "hash": "35f68958ec84d2d4e58215db53dd76ab"
+    "mtime": 1786554534.872222,
+    "hash": "049fd52afd4a784d1594722294f0d965"
   },
   "/Users/yb/Dev/projects/Lumen/src/screens/Ledger.tsx": {
     "mtime": 1782769652.0650365,
@@ -175,9 +243,13 @@
     "mtime": 1782771198.0778565,
     "hash": "1e88ac9980d381bf369ed6d14e5b744e"
   },
+  "/Users/yb/Dev/projects/Lumen/src/components/overlays/InstallPrompt.tsx": {
+    "mtime": 1786554861.8941925,
+    "hash": "83262562398d0e50e726a6ca4753c8b6"
+  },
   "/Users/yb/Dev/projects/Lumen/src/components/overlays/ConnectGmailFlow.tsx": {
-    "mtime": 1782775298.2547245,
-    "hash": "8a6d996223f87cbd7210637fc7bddb19"
+    "mtime": 1783073620.7735608,
+    "hash": "aa8d0cd11586ac1697f7a672361321b6"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/overlays/CancellationFlow.tsx": {
     "mtime": 1782771148.1825247,
@@ -188,8 +260,8 @@
     "hash": "b25a5a2b52c068534cc727d9fa4c90c3"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/layout/DeskSubPanel.tsx": {
-    "mtime": 1782771186.8762116,
-    "hash": "b3c3db5b715340448193e5099bf3e5ca"
+    "mtime": 1786554989.6888406,
+    "hash": "20ee7557830af02a21772f370daa2fd2"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/layout/DesktopSidebar.tsx": {
     "mtime": 1782773562.2831552,
@@ -284,16 +356,16 @@
     "hash": "2028130e1b22b646ca2e3ecd0308f3ce"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/subdetail/SubDetail.tsx": {
-    "mtime": 1782771182.7369545,
-    "hash": "151b359b696dcf97c7b35867819deaba"
+    "mtime": 1786555042.4886708,
+    "hash": "12abf37849b27b467b2bac813ba6a327"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/subdetail/VerdictHistory.tsx": {
     "mtime": 1782771140.0784793,
     "hash": "7aedf26929f07d0eabfa037e49daf39c"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/subdetail/SubDetailOverlay.tsx": {
-    "mtime": 1782771192.8580096,
-    "hash": "4f556256d27a9517f92846647936633a"
+    "mtime": 1786554659.16381,
+    "hash": "175d38c605a0f7953670bbcc1bc5dfd3"
   },
   "/Users/yb/Dev/projects/Lumen/src/components/subdetail/SharedWith.tsx": {
     "mtime": 1782771132.85729,
@@ -323,17 +395,25 @@
     "mtime": 1782769986.7733715,
     "hash": "fbbcc4bf42aa24c318032be4edbe0f43"
   },
+  "/Users/yb/Dev/projects/Lumen/src/hooks/useAutoGmailSync.ts": {
+    "mtime": 1786571758.4722881,
+    "hash": "79bcd2ec507092942c70604284d9a542"
+  },
   "/Users/yb/Dev/projects/Lumen/src/lib/clearUserSubscriptions.ts": {
     "mtime": 1782774490.8508523,
     "hash": "659f915d61cc2fbbf8d4b9c507dbffc7"
   },
   "/Users/yb/Dev/projects/Lumen/src/lib/gmailConnect.ts": {
-    "mtime": 1782775372.104905,
-    "hash": "d8e8ab054d1a5e04a4b88ec3326470a8"
+    "mtime": 1786571442.3853943,
+    "hash": "5d337189ce1669aa72b1275b7d0e9bfa"
   },
   "/Users/yb/Dev/projects/Lumen/src/lib/firebase.ts": {
-    "mtime": 1782767751.3055923,
-    "hash": "82eebbe3388dd693b3e58d8dacc8c298"
+    "mtime": 1786554534.7930255,
+    "hash": "d9c10c303573bdc58ef9bb362dd83598"
+  },
+  "/Users/yb/Dev/projects/Lumen/src/lib/notifications.ts": {
+    "mtime": 1786554989.679227,
+    "hash": "9aaabb7c5a81f9110d6441053ee289df"
   },
   "/Users/yb/Dev/projects/Lumen/src/lib/mailboxAccounts.ts": {
     "mtime": 1782773508.543107,
@@ -363,6 +443,10 @@
     "mtime": 1782770995.7036936,
     "hash": "1a51846a2c71c62b12ed6f21cdc111e1"
   },
+  "/Users/yb/Dev/projects/Lumen/src/lib/waitForGmailSync.ts": {
+    "mtime": 1783073620.773005,
+    "hash": "f29dcea0286f9c9dae51dc48e75d4544"
+  },
   "/Users/yb/Dev/projects/Lumen/src/lib/verdictCopy.ts": {
     "mtime": 1782771118.50405,
     "hash": "f59be86d8b32ac384287f1e9775026b8"
@@ -380,12 +464,12 @@
     "hash": "f91c131ce684481f4fde320ef4959355"
   },
   "/Users/yb/Dev/projects/Lumen/src/store/authStore.ts": {
-    "mtime": 1782767756.7239015,
-    "hash": "2e13d80a5d4e993d9359a1737b6530db"
+    "mtime": 1786570779.8164837,
+    "hash": "478b79994e7b55730fc7b036bc350ccb"
   },
   "/Users/yb/Dev/projects/Lumen/src/store/subStore.ts": {
-    "mtime": 1782773519.2477825,
-    "hash": "eb53142acf066f28d86b31a6cb066be3"
+    "mtime": 1786554534.850562,
+    "hash": "eb9175ab66975a79add65d30f75e05f7"
   },
   "/Users/yb/Dev/projects/Lumen/src/store/uiStore.ts": {
     "mtime": 1782771176.346646,
@@ -400,16 +484,16 @@
     "hash": "262c8db20f72cd8f9ce7277c26153382"
   },
   "/Users/yb/Dev/projects/Lumen/README.md": {
-    "mtime": 1782770347.961933,
-    "hash": "cdc06812c59a9803b36a81007be969ed"
+    "mtime": 1786555501.7089636,
+    "hash": "8b64d24a75be954899d77241cc5986e8"
   },
   "/Users/yb/Dev/projects/Lumen/CODEX.md": {
     "mtime": 1782767467.1412802,
     "hash": "9893ea7f4342c74fda110c808137bf3f"
   },
   "/Users/yb/Dev/projects/Lumen/GLOBAL_AGENTS.md": {
-    "mtime": 1782771116.3097486,
-    "hash": "e662606bc52048d0e7516732053a8c92"
+    "mtime": 1786539813.85974,
+    "hash": "ca1c6a3a5fdc2cee1c3307aa8c6dd4dc"
   },
   "/Users/yb/Dev/projects/Lumen/GEMINI.md": {
     "mtime": 1782767467.3932784,
@@ -432,16 +516,16 @@
     "hash": "9b46cd8a6d8a15884eef1fe424f851bc"
   },
   "/Users/yb/Dev/projects/Lumen/docs/agentic-harness.md": {
-    "mtime": 1782770329.412349,
-    "hash": "393f95a01b1bac345b05e8e7f3f6ae75"
+    "mtime": 1786555501.7153008,
+    "hash": "200d99d1a9ed29ffffbdfe689c7f368b"
   },
   "/Users/yb/Dev/projects/Lumen/docs/handoff.md": {
-    "mtime": 1782772500.588354,
-    "hash": "65dbee9a1b36ae7c46bb23c9f2602177"
+    "mtime": 1786555501.7239628,
+    "hash": "81f1ec895be161e75a6170dfe4d00298"
   },
   "/Users/yb/Dev/projects/Lumen/docs/setup-yasir.md": {
-    "mtime": 1782772507.096311,
-    "hash": "e6eb72d45e6277ae06e3bd9ed85ba551"
+    "mtime": 1786555501.8171213,
+    "hash": "f1b2ff7f674d615d121bd4f605bd99d7"
   },
   "/Users/yb/Dev/projects/Lumen/docs/runtime-harness-opportunities.md": {
     "mtime": 1782770343.3233442,

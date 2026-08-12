@@ -3,7 +3,7 @@
 **Project:** Lumen — Subscription Intelligence PWA  
 **Owner:** Yasir Bucha  
 **Path:** `/Users/yb/Dev/projects/Lumen`  
-**Updated:** 2026-06-30
+**Updated:** 2026-08-13
 
 ---
 
@@ -32,9 +32,9 @@ Visual source of truth: `public/prototype/` (open `index.html` or serve on port 
 |-------|--------|--------|
 | **0** | Design prototype in `public/prototype/` | ✅ Complete |
 | **1** | Vite shell, primitives, auth, AppShell, mobile tabs, seed/Firestore | ✅ Complete — build passes; hosting deployed |
-| **2** | Cloud Functions, Gmail sync, parsers, ConnectGmailFlow | 🟡 Partial — functions scaffold + 10 parsers in repo; **deploy blocked on Blaze** |
-| **3** | Sub Detail, Alerts, Calendar, Mailroom, desktop, overlays (⌘K, cancel, tour) | ⏳ Not started |
-| **4** | PWA manifest, offline, FCM | ⏳ Not started |
+| **2** | Cloud Functions, Gmail sync, parsers, ConnectGmailFlow | ✅ Deployed — Gmail re-auth and live sync verified |
+| **3** | Sub Detail, Alerts, Calendar, Mailroom, desktop, overlays (⌘K, cancel, tour) | ✅ Complete |
+| **4** | PWA manifest, offline, FCM | ✅ Implemented — VAPID key configured |
 
 ---
 

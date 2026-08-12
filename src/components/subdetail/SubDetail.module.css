@@ -294,3 +294,21 @@
   justify-content: center;
   gap: 10px;
 }
+
+.sheetLayer { position: fixed; inset: 0; z-index: 30; }
+.sheetBackdrop { position: absolute; inset: 0; width: 100%; border: 0; background: rgba(0, 0, 0, 0.55); cursor: pointer; }
+.sheet { position: absolute; left: 0; right: 0; bottom: 0; max-height: 75%; overflow-y: auto; padding: 14px 24px 36px; border-top: 1px solid; box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.4); }
+.sheetHandle { width: 30px; height: 3px; margin: 0 auto 14px; }
+.sheetHeader { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid; }
+.sheetTitle, .sheetOptionLabel { font-family: var(--font-display); font-weight: 700; letter-spacing: -0.02em; }
+.sheetTitle { font-size: 22px; }
+.sheetDone, .sheetSave { font-family: var(--font-mono); font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; cursor: pointer; }
+.sheetDone { border: 0; background: transparent; }
+.sheetNote { margin-bottom: 14px; font-family: var(--font-display); font-size: 13.5px; font-style: italic; line-height: 1.5; }
+.sheetGrid { display: grid; grid-template-columns: 1fr 1fr; }
+.sheetOption { display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 0; border-top: 1px solid; cursor: pointer; }
+.sheetGrid .sheetOption { padding-left: 8px; padding-right: 8px; }
+.sheetOptionSplit { border-left: 1px solid; }
+.sheetOptionLabel { flex: 1; font-size: 14px; }
+.sheetCard { width: 32px; height: 20px; flex: 0 0 auto; }
+.sheetSave { width: 100%; height: 48px; margin-top: 16px; border: 0; }

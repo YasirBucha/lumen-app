@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
   signOut as firebaseSignOut,
   type User,
 } from 'firebase/auth';
@@ -30,7 +31,13 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   signIn: async () => {
     if (!auth) throw new Error('Firebase Auth is not configured');
-    await signInWithPopup(auth, googleProvider);
+    try {
+      await signInWithPopup(auth, googleProvider);
+    } catch (error) {
+      const code = (error as { code?: string }).code;
+      if (code !== 'auth/popup-blocked' && code !== 'auth/operation-not-supported-in-this-environment') throw error;
+      await signInWithRedirect(auth, googleProvider);
+    }
   },
   signOut: async () => {
     if (!auth) return;
