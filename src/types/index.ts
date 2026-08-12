@@ -18,7 +18,11 @@ export interface GmailAccount {
   label?: string;
   email: string;
   color: string;
-  lastSyncAt?: string;
+  lastSyncAt?: string | { seconds: number };
+  historyId?: string;
+  syncTotal?: number;
+  syncProcessed?: number;
+  syncParsed?: number;
   status: 'synced' | 'syncing' | 'error';
 }
 

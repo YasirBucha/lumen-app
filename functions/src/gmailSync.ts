@@ -1,8 +1,12 @@
 import * as admin from 'firebase-admin';
 import { google } from 'googleapis';
-import { PARSERS } from './parsers';
-import type { GmailMessageLite } from './parsers/types';
-import { geminiParse } from './geminiParser';
+import {
+  buildSubscriptionsFromEvents,
+  isBillingLike,
+  processEmailToReceiptEvent,
+} from './parsers';
+import type { BuiltSubscription } from './parsers/merge';
+import type { GmailMessageLite, ReceiptEvent } from './parsers/types';
 
 if (!admin.apps.length) {
   admin.initializeApp();
@@ -10,45 +14,20 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
-const GMAIL_QUERY =
-  'from:(billing OR receipts OR renewal OR invoice OR no-reply) newer_than:5y';
+const GMAIL_QUERIES = [
+  'from:(billing OR receipts OR renewal OR invoice OR no-reply) newer_than:5y',
+  'from:(stripe.com OR paypal.com OR apple.com OR google.com OR pay.google.com) newer_than:5y',
+  'subject:(subscription OR invoice OR receipt OR renewal) newer_than:5y',
+];
 
-/** First sync cap — keeps callable under client + function deadlines. */
-const INITIAL_SYNC_MAX = 150;
-const FETCH_BATCH = 12;
+const SYNC_PAGE_SIZE = 100;
+const SYNC_MAX_MESSAGES = 800;
+const ACCOUNT_ID_RE = /^[A-Za-z0-9_-]{1,128}$/;
 
-function matchesAnyParser(msg: GmailMessageLite): boolean {
-  return PARSERS.some((p) => p.matches(msg));
-}
+export type SyncMode = 'full' | 'incremental';
 
-async function mapInBatches<T, R>(
-  items: T[],
-  batchSize: number,
-  fn: (item: T) => Promise<R>,
-): Promise<R[]> {
-  const out: R[] = [];
-  for (let i = 0; i < items.length; i += batchSize) {
-    const batch = items.slice(i, i + batchSize);
-    const results = await Promise.all(batch.map(fn));
-    out.push(...results);
-  }
-  return out;
-}
-
-export async function parseMessage(msg: GmailMessageLite, geminiKey?: string) {
-  for (const parser of PARSERS) {
-    if (parser.matches(msg)) {
-      const result = parser.parse(msg);
-      if (result && result.confidence >= 0.7) {
-        return { result, parserUsed: parser.id };
-      }
-    }
-  }
-  if (geminiKey) {
-    const result = await geminiParse(msg, geminiKey);
-    if (result) return { result, parserUsed: 'gemini' };
-  }
-  return null;
+export interface SyncOptions {
+  mode?: SyncMode;
 }
 
 function decodeBody(data?: string | null): string {
@@ -72,7 +51,7 @@ function toMessageLite(msg: {
   let bodyText = decodeBody(msg.payload?.body?.data);
   if (!bodyText && msg.payload?.parts) {
     bodyText = msg.payload.parts
-      .filter((p) => p.mimeType === 'text/plain')
+      .filter((p) => p.mimeType === 'text/plain' || p.mimeType === 'text/html')
       .map((p) => decodeBody(p.body?.data))
       .join('\n');
   }
@@ -82,105 +61,218 @@ function toMessageLite(msg: {
     from,
     snippet: msg.snippet ?? '',
     bodyText: bodyText || msg.snippet || '',
-    receivedAt: msg.internalDate ? new Date(Number(msg.internalDate)).toISOString() : new Date().toISOString(),
+    receivedAt: msg.internalDate
+      ? new Date(Number(msg.internalDate)).toISOString()
+      : new Date().toISOString(),
   };
 }
 
-const FX = 278;
-
-const CATEGORY_MAP: Record<string, string> = {
-  streaming: 'streaming',
-  software: 'productivity',
-  productivity: 'productivity',
-  cloud: 'cloud',
-  education: 'school',
-  school: 'school',
-  shopping: 'ecommerce',
-  ecommerce: 'ecommerce',
-  bills: 'bills',
-  other: 'bills',
-};
-
-function glyphColor(name: string): string {
-  let hash = 0;
-  for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
-  return `hsl(${Math.abs(hash) % 360} 45% 42%)`;
+async function mapInBatches<T, R>(
+  items: T[],
+  batchSize: number,
+  fn: (item: T) => Promise<R>,
+): Promise<R[]> {
+  const out: R[] = [];
+  for (let i = 0; i < items.length; i += batchSize) {
+    const batch = items.slice(i, i + batchSize);
+    out.push(...(await Promise.all(batch.map(fn))));
+  }
+  return out;
 }
 
-function toAmounts(amount: number, currency: string | null) {
-  const ccy = currency ?? 'USD';
-  const amountPKR = ccy === 'PKR' ? amount : Math.round(amount * FX);
-  const amountUSD = ccy === 'USD' ? amount : amount / FX;
-  return { amountPKR, amountUSD, currency: ccy };
+type GmailClient = ReturnType<typeof google.gmail>;
+
+function assertAccountId(accountId: string): void {
+  if (!ACCOUNT_ID_RE.test(accountId)) throw new Error('Invalid Gmail account id');
 }
 
-export async function runGmailSync(
-  uid: string,
-  accountId: string,
-  geminiKey?: string,
-  inlineAccessToken?: string,
-) {
-  const accountRef = db.doc(`users/${uid}/gmail_accounts/${accountId}`);
-  const accountSnap = await accountRef.get();
-  if (!accountSnap.exists) throw new Error('Gmail account not found');
+function tokenRef(uid: string, accountId: string) {
+  return db.doc(`users/${uid}/gmail_account_tokens/${accountId}`);
+}
 
-  const account = accountSnap.data() as {
-    refreshTokenEnc?: string;
-    tokenKind?: string;
-    email?: string;
-  };
-
-  const storedToken = account.refreshTokenEnc;
-  const token = inlineAccessToken ?? storedToken;
-  if (!token) throw new Error('Missing Gmail token — connect Gmail again');
-
-  await accountRef.set({ status: 'syncing' }, { merge: true });
-
-  const clientId = process.env.GMAIL_CLIENT_ID;
-  const clientSecret = process.env.GMAIL_CLIENT_SECRET;
-  if (!clientId || !clientSecret) {
-    await accountRef.set({ status: 'error' }, { merge: true });
-    throw new Error('Gmail OAuth not configured on server');
+async function listFullBillingMessageIds(gmail: GmailClient): Promise<string[]> {
+  const seen = new Set<string>();
+  for (const q of GMAIL_QUERIES) {
+    let pageToken: string | undefined;
+    do {
+      const res = await gmail.users.messages.list({
+        userId: 'me',
+        q,
+        maxResults: SYNC_PAGE_SIZE,
+        pageToken,
+      });
+      for (const m of res.data.messages ?? []) {
+        if (m.id) seen.add(m.id);
+        if (seen.size >= SYNC_MAX_MESSAGES) break;
+      }
+      if (seen.size >= SYNC_MAX_MESSAGES) break;
+      pageToken = res.data.nextPageToken ?? undefined;
+    } while (pageToken);
+    if (seen.size >= SYNC_MAX_MESSAGES) break;
   }
+  return [...seen].slice(0, SYNC_MAX_MESSAGES);
+}
 
-  const oauth2 = new google.auth.OAuth2(clientId, clientSecret);
-  const isAccessToken =
-    Boolean(inlineAccessToken) ||
-    account.tokenKind === 'access' ||
-    token.startsWith('ya29.') ||
-    token.startsWith('ya.a');
+async function listIncrementalMessageIds(
+  gmail: GmailClient,
+  startHistoryId: string,
+): Promise<{ messageIds: string[]; historyId: string | null; expired: boolean }> {
+  const seen = new Set<string>();
+  let pageToken: string | undefined;
+  let latestHistoryId: string | null = null;
 
-  if (isAccessToken) {
-    oauth2.setCredentials({ access_token: token });
-  } else if (token.startsWith('1//')) {
-    oauth2.setCredentials({ refresh_token: token });
-  } else {
-    await accountRef.set({ status: 'error' }, { merge: true });
-    throw new Error('Invalid stored Gmail token. Connect Gmail again.');
-  }
-
-  const gmail = google.gmail({ version: 'v1', auth: oauth2 });
-
-  let listRes;
   try {
-    listRes = await gmail.users.messages.list({
-      userId: 'me',
-      q: GMAIL_QUERY,
-      maxResults: INITIAL_SYNC_MAX,
-    });
+    do {
+      const res = await gmail.users.history.list({
+        userId: 'me',
+        startHistoryId,
+        historyTypes: ['messageAdded'],
+        pageToken,
+      });
+      latestHistoryId = res.data.historyId ?? latestHistoryId;
+      for (const h of res.data.history ?? []) {
+        for (const added of h.messagesAdded ?? []) {
+          if (added.message?.id) seen.add(added.message.id);
+        }
+      }
+      pageToken = res.data.nextPageToken ?? undefined;
+    } while (pageToken);
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
-    await accountRef.set({ status: 'error' }, { merge: true });
-    if (msg.includes('invalid_grant')) {
-      throw new Error('invalid_grant: Gmail token rejected. Connect Gmail again and approve access.');
+    if (msg.includes('404') || msg.includes('historyId')) {
+      return { messageIds: [], historyId: null, expired: true };
     }
     throw err;
   }
 
-  const messageIds = listRes.data.messages?.map((m) => m.id).filter(Boolean) as string[];
-  let parsedCount = 0;
+  return { messageIds: [...seen], historyId: latestHistoryId, expired: false };
+}
 
-  const metaMessages = await mapInBatches(messageIds, FETCH_BATCH, async (messageId) => {
+async function loadGeminiKey(uid: string): Promise<string | undefined> {
+  const snap = await db.collection(`users/${uid}/preferences`).limit(1).get();
+  if (snap.empty) return undefined;
+  const key = snap.docs[0].data()?.geminiApiKey as string | undefined;
+  return key?.trim() || undefined;
+}
+
+async function saveReceipt(uid: string, accountId: string, event: ReceiptEvent): Promise<void> {
+  await db.doc(`users/${uid}/receipts/${event.gmailMessageId}`).set(
+    {
+      gmailAccountId: accountId,
+      gmailMessageId: event.gmailMessageId,
+      subId: event.merchant ? event.merchant.toLowerCase().replace(/[^a-z0-9]+/g, '-') : '',
+      subject: event.subject,
+      fromAddr: event.fromAddr,
+      receivedAt: admin.firestore.Timestamp.fromDate(new Date(event.receivedAt)),
+      amountRaw: event.amountRaw ?? '',
+      parsedJson: event,
+      parserUsed: event.parserSource,
+      confidence: event.confidence,
+      classification: event.classification,
+      rejectionReason: event.rejectionReason,
+    },
+    { merge: true },
+  );
+}
+
+async function sendPriceIncreaseNotifications(uid: string, built: BuiltSubscription[]): Promise<void> {
+  const priceChanges = built.filter((entry) => entry.doc.priceIncrease);
+  if (priceChanges.length === 0) return;
+
+  try {
+    const tokenSnap = await db.collection(`users/${uid}/notification_tokens`).get();
+    const tokenEntries = tokenSnap.docs
+      .map((tokenDoc) => ({ token: tokenDoc.data().token, ref: tokenDoc.ref }))
+      .filter((entry): entry is { token: string; ref: FirebaseFirestore.DocumentReference } => typeof entry.token === 'string' && entry.token.length > 0);
+    if (tokenEntries.length === 0) return;
+    const tokens = tokenEntries.map((entry) => entry.token);
+
+    for (const entry of priceChanges) {
+      const increase = entry.doc.priceIncrease as Record<string, unknown>;
+      const eventId = `${entry.subId}-${String(increase.date)}-${String(increase.toPKR)}`.replace(/[^A-Za-z0-9_-]/g, '_');
+      const eventRef = db.doc(`users/${uid}/notification_events/${eventId}`);
+      try {
+        await eventRef.create({ subId: entry.subId, createdAt: admin.firestore.FieldValue.serverTimestamp() });
+      } catch (error) {
+        const code = (error as { code?: number | string }).code;
+        if (code === 6 || code === 'already-exists') continue;
+        throw error;
+      }
+
+      for (let i = 0; i < tokens.length; i += 500) {
+        const response = await admin.messaging().sendEachForMulticast({
+          tokens: tokens.slice(i, i + 500),
+          notification: {
+            title: `${String(entry.doc.merchant)} price changed`,
+            body: `Your renewal moved from Rs ${String(increase.fromPKR)} to Rs ${String(increase.toPKR)}.`,
+          },
+          data: { route: '/alerts', subId: entry.subId },
+        });
+        const stale = response.responses
+          .map((result, index) => (result.success ? null : tokenEntries[i + index]?.ref))
+          .filter((ref): ref is FirebaseFirestore.DocumentReference => Boolean(ref));
+        await Promise.all(stale.map((ref) => ref.delete()));
+      }
+    }
+  } catch (error) {
+    console.error('price increase notification failed', {
+      uid,
+      message: error instanceof Error ? error.message : String(error),
+    });
+  }
+}
+
+async function rebuildSubscriptions(uid: string, accountId: string): Promise<number> {
+  const snap = await db
+    .collection(`users/${uid}/receipts`)
+    .where('gmailAccountId', '==', accountId)
+    .get();
+
+  const events: ReceiptEvent[] = [];
+  for (const doc of snap.docs) {
+    const parsed = doc.data().parsedJson as ReceiptEvent | undefined;
+    if (parsed?.gmailMessageId) events.push(parsed);
+  }
+
+  const built = buildSubscriptionsFromEvents(events, accountId);
+  const activeIds = new Set(built.map((b) => b.subId));
+
+  for (const { subId, doc: subDoc } of built) {
+    await db.doc(`users/${uid}/subscriptions/${subId}`).set(
+      { ...subDoc, updatedAt: admin.firestore.FieldValue.serverTimestamp() },
+      { merge: true },
+    );
+  }
+
+  const existing = await db
+    .collection(`users/${uid}/subscriptions`)
+    .where('account', '==', accountId)
+    .get();
+  for (const doc of existing.docs) {
+    if (!activeIds.has(doc.id)) {
+      await doc.ref.set(
+        { status: 'past', updatedAt: admin.firestore.FieldValue.serverTimestamp() },
+        { merge: true },
+      );
+    }
+  }
+
+  await sendPriceIncreaseNotifications(uid, built);
+
+  return built.length;
+}
+
+async function processMessageIds(
+  gmail: GmailClient,
+  uid: string,
+  accountId: string,
+  messageIds: string[],
+  geminiKey?: string,
+  onProgress?: (processed: number, parsed: number) => Promise<void>,
+): Promise<number> {
+  if (messageIds.length === 0) return 0;
+
+  const metaMessages = await mapInBatches(messageIds, 12, async (messageId) => {
     const meta = await gmail.users.messages.get({
       userId: 'me',
       id: messageId,
@@ -190,71 +282,173 @@ export async function runGmailSync(
     return toMessageLite(meta.data);
   });
 
-  const candidates = metaMessages.filter(matchesAnyParser);
-  const fullMessages = await mapInBatches(candidates, FETCH_BATCH, async (lite) => {
+  const candidates = metaMessages.filter(isBillingLike);
+  const fullMessages = await mapInBatches(candidates, 10, async (lite) => {
     const full = await gmail.users.messages.get({ userId: 'me', id: lite.id, format: 'full' });
     return toMessageLite(full.data);
   });
 
-  for (const lite of fullMessages) {
-    const parsed = await parseMessage(lite, geminiKey);
-    if (!parsed?.result.isSubscription) continue;
+  let parsedEvents = 0;
+  for (let i = 0; i < fullMessages.length; i += 1) {
+    const msg = fullMessages[i];
+    const event = await processEmailToReceiptEvent(msg, geminiKey);
+    await saveReceipt(uid, accountId, event);
+    if (event.classification !== 'not_subscription' && event.rejectionReason === null && event.merchant) {
+      parsedEvents += 1;
+    }
+    if (onProgress && ((i + 1) % 10 === 0 || i === fullMessages.length - 1)) {
+      await onProgress(i + 1, parsedEvents);
+    }
+  }
+  return parsedEvents;
+}
 
-    parsedCount += 1;
-    const subId = parsed.result.merchant.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-    const { amountPKR, amountUSD, currency } = toAmounts(parsed.result.amount, parsed.result.currency);
-    const merchant = parsed.result.merchant;
-    const cycle = parsed.result.cadence === 'yearly' ? 'yearly' : 'monthly';
-    const now = new Date();
-    const nextCharge = new Date(now.getFullYear(), now.getMonth() + 1, 15).toISOString().slice(0, 10);
+function createOAuthClient(token: string, inlineAccessToken?: string, tokenKind?: string) {
+  const clientId = process.env.GMAIL_CLIENT_ID;
+  const clientSecret = process.env.GMAIL_CLIENT_SECRET;
+  if (!clientId || !clientSecret) throw new Error('Gmail OAuth not configured on server');
 
-    await db.doc(`users/${uid}/subscriptions/${subId}`).set(
+  const oauth2 = new google.auth.OAuth2(clientId, clientSecret);
+  const isAccessToken =
+    Boolean(inlineAccessToken) ||
+    tokenKind === 'access' ||
+    token.startsWith('ya29.') ||
+    token.startsWith('ya.a');
+
+  if (isAccessToken) {
+    oauth2.setCredentials({ access_token: inlineAccessToken ?? token });
+  } else if (tokenKind === 'refresh' || token.startsWith('1//')) {
+    oauth2.setCredentials({ refresh_token: token });
+  } else {
+    throw new Error('Invalid stored Gmail token. Connect Gmail again.');
+  }
+  return oauth2;
+}
+
+export async function runGmailSync(
+  uid: string,
+  accountId: string,
+  geminiKey?: string,
+  inlineAccessToken?: string,
+  options: SyncOptions = {},
+) {
+  assertAccountId(accountId);
+  const accountRef = db.doc(`users/${uid}/gmail_accounts/${accountId}`);
+  const accountSnap = await accountRef.get();
+  if (!accountSnap.exists) throw new Error('Gmail account not found');
+
+  const account = accountSnap.data() as {
+    historyId?: string;
+  };
+
+  const tokenSnap = await tokenRef(uid, accountId).get();
+  const tokenData = tokenSnap.data() as { token?: string; tokenKind?: string } | undefined;
+  const storedToken = tokenData?.token;
+  const token = inlineAccessToken ?? storedToken;
+  if (!token) throw new Error('Missing Gmail token — connect Gmail again');
+
+  await accountRef.set(
+    { status: 'syncing', syncTotal: 0, syncProcessed: 0, syncParsed: 0 },
+    { merge: true },
+  );
+
+  let oauth2;
+  try {
+    oauth2 = createOAuthClient(token, inlineAccessToken, tokenData?.tokenKind);
+  } catch (err) {
+    await accountRef.set({ status: 'error' }, { merge: true });
+    throw err;
+  }
+
+  const gmail = google.gmail({ version: 'v1', auth: oauth2 });
+  const resolvedGeminiKey = geminiKey ?? (await loadGeminiKey(uid));
+  const mode = options.mode ?? 'full';
+
+  let messageIds: string[] = [];
+  let syncMode: SyncMode = mode;
+
+  try {
+    const profile = await gmail.users.getProfile({ userId: 'me' });
+    const currentHistoryId = profile.data.historyId ?? null;
+
+    if (mode === 'incremental' && account.historyId) {
+      const inc = await listIncrementalMessageIds(gmail, account.historyId);
+      if (inc.expired) {
+        syncMode = 'full';
+        messageIds = await listFullBillingMessageIds(gmail);
+    } else {
+      messageIds = inc.messageIds;
+      }
+    } else {
+      messageIds = await listFullBillingMessageIds(gmail);
+    }
+
+    await accountRef.set(
+      { syncTotal: messageIds.length, syncProcessed: 0, syncParsed: 0 },
+      { merge: true },
+    );
+
+    const parsedEvents = await processMessageIds(
+      gmail,
+      uid,
+      accountId,
+      messageIds,
+      resolvedGeminiKey,
+      async (syncProcessed, syncParsed) => {
+        await accountRef.set({ syncProcessed, syncParsed }, { merge: true });
+      },
+    );
+    const subscriptionCount = await rebuildSubscriptions(uid, accountId);
+
+    await accountRef.set(
       {
-        merchant,
-        glyph: merchant.charAt(0).toUpperCase(),
-        glyphBg: glyphColor(merchant),
-        amountOrig: parsed.result.amount,
-        amountPKR,
-        amountUSD,
-        currency,
-        cycle,
-        category: CATEGORY_MAP[parsed.result.category] ?? 'bills',
-        account: accountId,
-        card: 'visa',
-        last4: '0000',
-        nextCharge,
-        since: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`,
-        status: 'active',
-        verdict: 'review',
-        evidence: [parsed.result.notes ?? 'Parsed from Gmail receipt'],
-        usage: { sessionsLast30: 0, lastUsed: 'Unknown' },
-        history: [],
-        updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+        status: 'synced',
+        lastSyncAt: admin.firestore.FieldValue.serverTimestamp(),
+        historyId: currentHistoryId ?? account.historyId ?? null,
+        lastSyncMode: syncMode,
       },
       { merge: true },
     );
 
-    await db.doc(`users/${uid}/receipts/${lite.id}`).set({
-      gmailAccountId: accountId,
-      gmailMessageId: lite.id,
-      subId,
-      subject: lite.subject,
-      fromAddr: lite.from,
-      receivedAt: admin.firestore.Timestamp.fromDate(new Date(lite.receivedAt)),
-      amountRaw: String(parsed.result.amount),
-      parsedJson: parsed.result,
-      parserUsed: parsed.parserUsed,
-      confidence: parsed.result.confidence,
-    });
+    return {
+      scanned: messageIds.length,
+      parsed: parsedEvents,
+      subscriptions: subscriptionCount,
+      mode: syncMode,
+    };
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    await accountRef.set({ status: 'error' }, { merge: true });
+    if (msg.includes('invalid_grant')) {
+      throw new Error('invalid_grant: Gmail token rejected. Connect Gmail again and approve access.');
+    }
+    throw err;
   }
+}
 
-  await accountRef.set(
-    {
-      status: 'synced',
-      lastSyncAt: admin.firestore.FieldValue.serverTimestamp(),
-    },
-    { merge: true },
-  );
+/** Incremental sync for all connected mailboxes — used by scheduled job. */
+export async function runIncrementalSyncForAllAccounts(): Promise<void> {
+  const snap = await db.collectionGroup('gmail_accounts').where('status', 'in', ['synced', 'error']).get();
 
-  return { scanned: messageIds.length, parsed: parsedCount };
+  for (const doc of snap.docs) {
+    const uid = doc.ref.parent.parent?.id;
+    if (!uid) continue;
+    const accountId = doc.id;
+    try {
+      const tokenSnap = await tokenRef(uid, accountId).get();
+      const tokenData = tokenSnap.data() as { token?: string; tokenKind?: string } | undefined;
+      if (!tokenData?.token || tokenData.tokenKind !== 'refresh') {
+        console.warn('incremental sync skipped: no refresh token', { uid, accountId });
+        continue;
+      }
+      await runGmailSync(uid, accountId, undefined, undefined, { mode: 'incremental' });
+      console.log('incremental sync ok', { uid, accountId });
+    } catch (err) {
+      console.error('incremental sync fail', {
+        uid,
+        accountId,
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
 }

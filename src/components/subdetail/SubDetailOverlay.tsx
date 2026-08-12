@@ -1,7 +1,9 @@
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { useTheme } from '../../hooks/useTheme';
 import { useIsDesktop } from '../../hooks/useMediaQuery';
 import { useSubStore } from '../../store/subStore';
 import { useUiStore } from '../../store/uiStore';
+import { auth, db } from '../../lib/firebase';
 import { SubDetail } from './SubDetail';
 
 export function SubDetailOverlay() {
@@ -13,6 +15,7 @@ export function SubDetailOverlay() {
   const currency = useUiStore((s) => s.currency);
   const aiTone = useUiStore((s) => s.aiTone);
   const setCancelSubId = useUiStore((s) => s.setCancelSubId);
+  const updateSubscription = useSubStore((s) => s.updateSubscription);
 
   if (isDesktop || !openSubId) return null;
 
@@ -29,6 +32,15 @@ export function SubDetailOverlay() {
       onCancel={(s) => {
         setCancelSubId(s.id);
         setOpenSubId(null);
+      }}
+      onUpdate={(patch) => {
+        updateSubscription(sub.id, patch);
+        if (auth?.currentUser && db) {
+          void updateDoc(doc(db, 'users', auth.currentUser.uid, 'subscriptions', sub.id), {
+            ...patch,
+            updatedAt: serverTimestamp(),
+          });
+        }
       }}
     />
   );

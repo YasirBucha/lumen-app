@@ -1,6 +1,6 @@
-import type { ReactNode } from 'react';
-import type { AiTone, Subscription, ThemeTokens } from '../../types';
-import { ACCOUNTS, CATEGORIES } from '../../lib/seedData';
+import { useState, type KeyboardEvent, type ReactNode } from 'react';
+import type { AiTone, CardKind, Category, Subscription, ThemeTokens } from '../../types';
+import { ACCOUNTS, CARD_KINDS, CATEGORIES } from '../../lib/seedData';
 import {
   daysUntil,
   fmt,
@@ -34,7 +34,87 @@ interface SubDetailProps {
   sub: Subscription;
   onClose: () => void;
   onCancel: (sub: Subscription) => void;
+  onUpdate: (patch: Partial<Pick<Subscription, 'card' | 'category'>>) => void;
   compact?: boolean;
+}
+
+type SheetKind = 'card' | 'category' | null;
+
+function TagSheet({
+  theme,
+  kind,
+  sub,
+  onClose,
+  onApply,
+}: {
+  theme: ThemeTokens;
+  kind: Exclude<SheetKind, null>;
+  sub: Subscription;
+  onClose: () => void;
+  onApply: (value: CardKind | Category) => void;
+}) {
+  const [pick, setPick] = useState<CardKind | Category>(kind === 'card' ? sub.card : sub.category);
+  const options = kind === 'card'
+    ? (Object.entries(CARD_KINDS) as Array<[CardKind, (typeof CARD_KINDS)[CardKind]]>).map(([value, meta]) => ({ value, label: meta.label, tint: meta.tint }))
+    : CATEGORIES.map(({ id: value, label }) => ({ value, label }));
+  const activate = (event: KeyboardEvent<HTMLDivElement>, value: string) => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      setPick(value as CardKind | Category);
+    }
+  };
+
+  return (
+    <div className={styles.sheetLayer} role="presentation">
+      <button type="button" className={styles.sheetBackdrop} onClick={onClose} aria-label="Close sheet" />
+      <section className={styles.sheet} style={{ background: theme.surfaceRaised, borderTopColor: theme.borderHi }} aria-modal="true" role="dialog">
+        <div className={styles.sheetHandle} style={{ background: theme.borderHi }} />
+        <div className={styles.sheetHeader} style={{ borderBottomColor: theme.border }}>
+          <div className={styles.sheetTitle} style={{ color: theme.text }}>
+            {kind === 'card' ? 'Payment' : 'Category'}<span style={{ color: theme.accent }}>.</span>
+          </div>
+          <button type="button" className={styles.sheetDone} onClick={onClose} style={{ color: theme.textMuted }}>
+            Done
+          </button>
+        </div>
+        <div className={styles.sheetNote} style={{ color: theme.textMuted }}>
+          {kind === 'card'
+            ? `Detected card on file: ${CARD_KINDS[sub.card].label} ending ${sub.last4}.`
+            : 'Categories help spot patterns across your ledger.'}
+        </div>
+        <div className={kind === 'category' ? styles.sheetGrid : undefined}>
+          {options.map((option, index) => {
+            const { value, label } = option;
+            const tint = 'tint' in option ? option.tint : undefined;
+            const selected = pick === value;
+            return (
+              <div
+                key={value}
+                className={`${styles.sheetOption} ${kind === 'category' && index % 2 ? styles.sheetOptionSplit : ''}`}
+                style={{ borderTopColor: theme.border, borderLeftColor: theme.border, background: selected ? theme.surface : 'transparent' }}
+                role="button"
+                tabIndex={0}
+                onClick={() => setPick(value as CardKind | Category)}
+                onKeyDown={(event) => activate(event, value)}
+              >
+                {kind === 'card' ? (
+                  <span className={styles.sheetCard} style={{ background: `linear-gradient(135deg, ${tint?.[0]}, ${tint?.[1]})` }} />
+                ) : (
+                  <CategoryDot id={value as Category} size={10} />
+                )}
+                <span className={styles.sheetOptionLabel} style={{ color: theme.text }}>{label}</span>
+                {kind === 'card' && <Mono color={theme.textSubtle} size={9} tracking="0.1em">•••• {sub.last4}</Mono>}
+                {selected && <Mono color={theme.accent} size={9} tracking="0.14em">SELECTED</Mono>}
+              </div>
+            );
+          })}
+        </div>
+        <button type="button" className={styles.sheetSave} onClick={() => onApply(pick)} style={{ background: theme.accent, color: theme.accentInk }}>
+          Save
+        </button>
+      </section>
+    </div>
+  );
 }
 
 function CancelledStamp() {
@@ -64,6 +144,12 @@ function TagRow({
       className={`${styles.tagRow} ${first ? '' : styles.tagRowBorder}`}
       style={{ borderTopColor: theme.border, cursor: onClick ? 'pointer' : 'default' }}
       onClick={onClick}
+      onKeyDown={(event) => {
+        if (onClick && (event.key === 'Enter' || event.key === ' ')) {
+          event.preventDefault();
+          onClick();
+        }
+      }}
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
@@ -88,7 +174,8 @@ function TagRow({
   );
 }
 
-export function SubDetail({ theme, currency, aiTone, sub, onClose, onCancel, compact }: SubDetailProps) {
+export function SubDetail({ theme, currency, aiTone, sub, onClose, onCancel, onUpdate, compact }: SubDetailProps) {
+  const [sheet, setSheet] = useState<SheetKind>(null);
   const account = ACCOUNTS.find((a) => a.id === sub.account) ?? ACCOUNTS[0];
   const monthly = monthlyEquivalent(sub);
   const yearly = yearlyEquivalent(sub);
@@ -253,10 +340,10 @@ export function SubDetail({ theme, currency, aiTone, sub, onClose, onCancel, com
       </Section>
 
       <Section theme={theme} kicker="VERIFIED TAGS">
-        <TagRow theme={theme} label="Payment method" first>
+        <TagRow theme={theme} label="Payment method" first onClick={() => setSheet('card')}>
           <CardChip kind={sub.card} last4={sub.last4} theme={theme} />
         </TagRow>
-        <TagRow theme={theme} label="Category">
+        <TagRow theme={theme} label="Category" onClick={() => setSheet('category')}>
           <div className={styles.tagCategory}>
             <CategoryDot id={sub.category} />
             <span className={styles.categoryLabel} style={{ color: theme.text }}>
@@ -356,6 +443,18 @@ export function SubDetail({ theme, currency, aiTone, sub, onClose, onCancel, com
           </>
         )}
       </div>
+      {sheet && (
+        <TagSheet
+          theme={theme}
+          kind={sheet}
+          sub={sub}
+          onClose={() => setSheet(null)}
+          onApply={(value) => {
+            onUpdate(sheet === 'card' ? { card: value as CardKind } : { category: value as Category });
+            setSheet(null);
+          }}
+        />
+      )}
     </div>
   );
 }

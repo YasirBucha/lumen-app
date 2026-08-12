@@ -7,9 +7,11 @@ import { AppShell } from './components/layout/AppShell';
 import { CommandPalette } from './components/overlays/CommandPalette';
 import { ConnectGmailFlow } from './components/overlays/ConnectGmailFlow';
 import { SubDetailOverlay } from './components/subdetail/SubDetailOverlay';
+import { InstallPrompt } from './components/overlays/InstallPrompt';
 import { CancellationFlow } from './components/overlays/CancellationFlow';
 import { useKeyboard } from './hooks/useKeyboard';
 import { useGmailAccounts } from './hooks/useGmailAccounts';
+import { useAutoGmailSync } from './hooks/useAutoGmailSync';
 import { SignIn } from './screens/SignIn';
 import { Scanning } from './screens/Scanning';
 import { Dashboard } from './screens/Dashboard';
@@ -27,6 +29,7 @@ function AppRoutes() {
   const loading = useAuthStore((s) => s.loading);
   useSubscriptions();
   useGmailAccounts();
+  useAutoGmailSync();
   useTheme();
   useKeyboard();
 
@@ -68,6 +71,7 @@ function AppRoutes() {
       <CancellationFlow />
       <CommandPalette />
       <SubDetailOverlay />
+      <InstallPrompt />
     </>
   );
 }

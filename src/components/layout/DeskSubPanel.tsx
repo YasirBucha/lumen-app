@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useTheme } from '../../hooks/useTheme';
 import { useSubStore } from '../../store/subStore';
 import { useUiStore } from '../../store/uiStore';
+import { auth, db } from '../../lib/firebase';
+import { doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import { SubDetail } from '../subdetail/SubDetail';
 import styles from './DeskSubPanel.module.css';
 
@@ -13,6 +15,7 @@ export function DeskSubPanel() {
   const openSubId = useSubStore((s) => s.openSubId);
   const setOpenSubId = useSubStore((s) => s.setOpenSubId);
   const subs = useSubStore((s) => s.subscriptions);
+  const updateSubscription = useSubStore((s) => s.updateSubscription);
   const sub = subs.find((s) => s.id === openSubId) ?? null;
   const open = !!sub;
 
@@ -51,6 +54,16 @@ export function DeskSubPanel() {
             onCancel={(s) => {
               setCancelSubId(s.id);
               setOpenSubId(null);
+            }}
+            onUpdate={(patch) => {
+              if (!displaySub) return;
+              updateSubscription(displaySub.id, patch);
+              if (auth?.currentUser && db) {
+                void updateDoc(doc(db, 'users', auth.currentUser.uid, 'subscriptions', displaySub.id), {
+                  ...patch,
+                  updatedAt: serverTimestamp(),
+                });
+              }
             }}
             compact
           />

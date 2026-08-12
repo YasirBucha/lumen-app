@@ -1,30 +1,12 @@
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { GoogleAuthProvider, signInWithPopup, type UserCredential } from 'firebase/auth';
 import { httpsCallable, type FunctionsError } from 'firebase/functions';
 import { auth, db, functions } from './firebase';
-import { accountIdFromEmail } from './mailboxAccounts';
-
-const GMAIL_SCOPE = 'https://www.googleapis.com/auth/gmail.readonly';
-
-type GoogleTokenResponse = {
-  oauthAccessToken?: string;
-};
+import { waitForGmailAccountSync } from './waitForGmailSync';
 
 export interface ConnectResult {
   accountId: string;
   email: string;
-  accessToken: string;
-}
-
-/** Google OAuth access token for Gmail API — NOT Firebase session refresh token. */
-function googleAccessTokenFromCredential(result: UserCredential): string {
-  const credential = GoogleAuthProvider.credentialFromResult(result);
-  const tokenResponse = (result as UserCredential & { _tokenResponse?: GoogleTokenResponse })._tokenResponse;
-  const accessToken = credential?.accessToken ?? tokenResponse?.oauthAccessToken;
-  if (!accessToken) {
-    throw new Error('Google did not return a Gmail access token. Approve Gmail access and try again.');
-  }
-  return accessToken;
+  accessToken?: string;
 }
 
 export function parseCallableError(err: unknown): string {
@@ -50,24 +32,14 @@ export async function connectGmailMailbox(
   label: string,
 ): Promise<ConnectResult> {
   if (!auth || !db) throw new Error('Firebase not configured');
-
-  const provider = new GoogleAuthProvider();
-  provider.addScope(GMAIL_SCOPE);
-  provider.setCustomParameters({ prompt: 'consent', access_type: 'offline' });
-
-  const result = await signInWithPopup(auth, provider);
-  const accessToken = googleAccessTokenFromCredential(result);
-
-  const email = result.user.email;
-  if (!email) throw new Error('No email on Google account');
+  const email = auth.currentUser?.email;
+  if (!email) throw new Error('No signed-in Google account');
 
   await setDoc(
     doc(db, 'users', uid, 'gmail_accounts', accountId),
     {
       email,
       label,
-      refreshTokenEnc: accessToken,
-      tokenKind: 'access',
       status: 'syncing',
       color,
       lastSyncAt: serverTimestamp(),
@@ -75,26 +47,49 @@ export async function connectGmailMailbox(
     { merge: true },
   );
 
-  return { accountId, email, accessToken };
+  if (!functions) throw new Error('Cloud Functions not available');
+  const fn = httpsCallable<
+    { accountId: string; origin: string },
+    { url: string }
+  >(functions, 'gmailOAuthStart');
+  try {
+    const result = await fn({ accountId, origin: window.location.origin });
+    window.location.assign(result.data.url);
+    return new Promise<ConnectResult>(() => undefined);
+  } catch (error) {
+    await setDoc(doc(db, 'users', uid, 'gmail_accounts', accountId), { status: 'error' }, { merge: true });
+    throw error;
+  }
 }
 
-export { clearUserSubscriptions } from './clearUserSubscriptions';
+export async function triggerGmailSync(
+  uid: string,
+  accountId: string,
+  opts?: { accessToken?: string; incremental?: boolean },
+): Promise<{ scanned: number; parsed: number; subscriptions?: number; mode?: string }> {
+  if (!functions) throw new Error('Cloud Functions not available');
+  const fn = httpsCallable<
+    { accountId: string; accessToken?: string; incremental?: boolean },
+    { scanned: number; parsed: number; subscriptions?: number; mode?: string }
+  >(functions, 'gmailInitialSync', { timeout: 540_000 });
 
-export async function connectCurrentUserMailbox(uid: string, email: string): Promise<ConnectResult> {
-  const accountId = accountIdFromEmail(email);
-  const label = email.split('@')[0] ?? 'Primary';
-  return connectGmailMailbox(uid, accountId, '#E94F3B', label);
+  try {
+    const data: { accountId: string; accessToken?: string; incremental?: boolean } = { accountId };
+    if (opts?.accessToken) data.accessToken = opts.accessToken;
+    if (opts?.incremental) data.incremental = true;
+    return (await fn(data)).data;
+  } catch (err) {
+    const code = (err as FunctionsError)?.code;
+    if (code !== 'functions/deadline-exceeded' && code !== 'functions/unavailable') throw err;
+    const polled = await waitForGmailAccountSync(uid, accountId);
+    return { scanned: 0, parsed: polled.parsedCount, mode: opts?.incremental ? 'incremental' : 'full' };
+  }
 }
 
 export async function triggerGmailInitialSync(
+  uid: string,
   accountId: string,
   accessToken?: string,
-): Promise<{ scanned: number; parsed: number }> {
-  if (!functions) throw new Error('Cloud Functions not available');
-  const fn = httpsCallable<
-    { accountId: string; accessToken?: string },
-    { scanned: number; parsed: number }
-  >(functions, 'gmailInitialSync', { timeout: 540_000 });
-  const res = await fn({ accountId, accessToken });
-  return res.data;
+): Promise<{ scanned: number; parsed: number; subscriptions?: number }> {
+  return triggerGmailSync(uid, accountId, { accessToken, incremental: false });
 }
